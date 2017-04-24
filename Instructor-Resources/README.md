@@ -14,7 +14,7 @@ Once you have a working MRS environment, you'll need to do the following
 	- run the packages installation script by typing (in the bash terminal) `Rscript ./0-pkgs-install.R`
 	- this will install all the R packages you need to run the environment
 	- by default it'll use the last snapshot of the packages that are known to work with our materials
-	- if you like to live on the edge, use the latest mirror of CRAN `Rscript ./0-pkgs-install.R "latest"`
+	- if you like to live on the edge, use the latest mirror of CRAN `Rscript ./0-pkgs-install.R latest`
 2. [1-render-modules.R](https://github.com/Azure/mr4ds/blob/master/Instructor-Resources/1-render-modules.R)
 	- render all course Rmds into PDFs/htmls
 	- You'll need to be in `mr4ds` folder, so `cd ../` if you are currently `mr4ds/Instructor-Resources`
