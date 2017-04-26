@@ -9,13 +9,6 @@ output:
     self_contained: no
 ---
 
-```{r setup, cache = FALSE, include = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
-knitr::opts_chunk$set(warning = FALSE)
-
-```
-
-
 # MicrosoftML
 
 + [MicrosoftML Package Homepage](aka.ms/MML)
@@ -78,6 +71,19 @@ For this example, we will analyze IMDB movies reviews and the sentiment associat
 
 I've also saved the data on a public facing Azure Blob Container [here](http://alizaidi.blob.core.windows.net/training/aclImdb_v1.tar.gz).
 
+### Download Data
+
+
+```{r}
+whoami <- system("whoami", intern = TRUE)
+your_directory <- file.path("/datadrive", whoami, "imdb")
+if (!(dir.exists(your_directory))) dir.create(your_directory, recursive = T)
+system(paste0("wget http://alizaidi.blob.core.windows.net/training/aclImdb_v1.tar.gz -O ", 
+              your_directory, "acl.tar.gz"))
+system(paste0("tar -xvzf ", your_directory, "acl.tar.gz ", "-C ", file.path("/datadrive", whoami)))
+```
+
+
 
 The data are saved as separate text files per review, and are separated into train and test sets, and further by positive and negative sentiments:
 
@@ -102,7 +108,7 @@ cwd <- getwd()
 
 options(stringsAsFactors = FALSE)
 
-imdb_dir <- "C:/Users/alizaidi/Documents/Data/aclImdb/"
+imdb_dir <- file.path("/datadrive", whoami, "aclImdb")
 
 read_reviews <- function(path, sentiment) {
   
@@ -144,18 +150,21 @@ train_df <- make_df("train")
 test_df <- make_df("test")
 
 setwd(cwd)
+
+head(train_df)
+table(train_df$sentiment)
 ```
 
 
 ### Applying Transformers to Create Text Features
 
-Our compiled `data.frame` of IMDB data reviews looks rather simple. It is is a `data.frame` of two columns, one containing the raw review, and the sescond containing the sentiment binary variable: positive or negative.
+Our compiled `data.frame` of IMDB data reviews looks rather simple. It is is a `data.frame` of two columns, one containing the raw review, and the second containing the sentiment binary variable: positive or negative.
 
 By itself, the raw text data source isn't a very helpful feature variable for predicting the sentiment value. However, we can create/engineer a large amount of feature variables using the text column.
 
 As a first pass, we might even consider using the text data source as a collection of words, and try to use each word individually as it's own column. This will be the union of all the words that appear in any review, so will yield a very high cardinality/dimensionality feature matrix with large sparsity (i.e., any given review will only contain a small subset of all the words in the reviews "dictionary").
 
-Next, we can use the `mxLogisticReg` function in MML. The `mxLogisticReg` function contains arguments for the hyperparameter weights for each of the penalty terms. Moreover, we will utilize a `mxTransforms` call to add a list of featurizers/transformers for engineering. While this feature engineering step might require multiple iterations and use cross-validation to pick the best choice, we will start with a text transformation and create _ngrams_ of length 3. This will create a _continguous_ collection of three words that can be then used as predictors. This is a simple method of thinking of possible interaction of words as possible predictors for our sentiment response.
+Next, we can use the `rxLogisticReg` function in MML. The `mxLogisticReg` function contains arguments for the hyperparameter weights for each of the penalty terms. Moreover, we will utilize a `mxTransforms` call to add a list of featurizers/transformers for engineering. While this feature engineering step might require multiple iterations and use cross-validation to pick the best choice, we will start with a text transformation and create _ngrams_ of length 3. This will create a _continguous_ collection of three words that can be then used as predictors. This is a simple method of thinking of possible interaction of words as possible predictors for our sentiment response.
 
 ```{r logit}
 
@@ -172,7 +181,7 @@ system.time(logit_model <- rxLogisticRegression(sentiment ~ reviewTran,
                               mlTransforms = list(featurizeText(vars = c(reviewTran = "review"),
                                                          language = "English",
                                                          stopwordsRemover = stopwordsDefault(),
-                                                         ngramLength = 3,
+                                                         wordFeatureExtractor = ngramCount(3),
                                                          keepPunctuations = FALSE)))
 )
 
@@ -183,7 +192,7 @@ system.time(fast_linear <- rxFastTrees(sentiment ~ reviewTran,
                               mlTransforms = list(featurizeText(vars = c(reviewTran = "review"),
                                                          language = "English",
                                                          stopwordsRemover = stopwordsDefault(),
-                                                         ngramLength = 3,
+                                                         wordFeatureExtractor = ngramCount(3),
                                                          keepPunctuations = FALSE)))
 )
 
@@ -243,22 +252,6 @@ d3_graphs[[2]]
 ```
 
 
-
-```{r pipeline_api, eval = FALSE, echo = FALSE}
-
-library(magrittr)
-
-review_logit <- train_df %>%
-    featurizeText(vars = c(reviewTran = "review"),
-                        stopwordsRemover = stopwordsDefault(),
-                        keepPunctuations = FALSE,
-                        ngramLength = 3 )
-    train(formula = sentiment ~ reviewTran,
-          lr = LogisticReg(l2Weight = 0.05, l1Weight = 0.05)) %>% run
-
-```
-
-
 ### Testing the Logit Model
 
 In order to predict our classifer on test data, we will use the `mxPredict` function from the `MML` package.
@@ -271,23 +264,6 @@ roc_results$predVarName <- factor(roc_results$predVarName)
 plot(roc_results)
 
 ```
-
-
-##### The Pipeline API
-
-Why not use pipes! The pipeline API is still a work in progress, and the example below is just to show some of it's features. The API will support modifying pipelines, and additional featurization modules.
-
-```{r pipeline, eval = FALSE}
-
-options(stringsAsFactors = TRUE)
-
-predictions_pipeline <- logit_model %>% 
-  rxPredict(data = test_df, extraVarsToWrite = "sentiment") %>% 
-  rxRocCurve(actualVarName = "sentiment", predVarNames = "Probability.1", data = .) 
-
-```
-
-
 
 ### Testing the SDCA Model
 
@@ -317,7 +293,8 @@ nn_sentiment <- rxNeuralNet(sentiment ~ reviewTran,
                                                          language = "English",
                                                          stopwordsRemover = stopwordsDefault(),
                                                          keepPunctuations = FALSE)),
-                          acceleration = "gpu", miniBatchSize = 4)
+                          # acceleration = "gpu",
+                          miniBatchSize = 4)
 
 ```
 
