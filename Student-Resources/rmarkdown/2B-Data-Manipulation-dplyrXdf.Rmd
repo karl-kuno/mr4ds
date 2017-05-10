@@ -88,13 +88,13 @@ DeployR: web service development kit through APIs, java, js, .net
 ### Create a local directory to save XDF
 
 ```{r}
-your_name <- "alizaidi"
-your_dir <- paste0('/datadrive/', your_name)
+your_name <- system('whoami', intern = TRUE)
+your_dir <- paste0('/home/', your_name)
 # File Path to your Data
 your_data <- file.path(your_dir, 'tripdata_2015.xdf')
-dir.create(your_dir)
-download.file("http://alizaidi.blob.core.windows.net/training/trainingData/manhattan.xdf", 
-              destfile = your_data)
+if (!(dir.exists(your_dir))) dir.create(your_dir)
+file.copy("/home/sharedData/tripdata_2015.xdf", your_data, overwrite = TRUE)
+setXdfTblDir(file.path(your_dir, "tmpXdf"))
 ```
 
 ## Create a Pointer to XDF
@@ -102,61 +102,39 @@ download.file("http://alizaidi.blob.core.windows.net/training/trainingData/manha
 ```{r}
 library(dplyrXdf)
 taxi_xdf <- RxXdfData(your_data)
-taxi_xdf %>% head
-taxi_xdf %>% nrow
+str(taxi_xdf)
 ```
 
+This looks like a different kind of object. The `str` function didn't provide much interesting information. To see more about the data, use the `rxGetInfo` function.
 
 ```{r}
 class(taxi_xdf)
+rxGetInfo(taxi_xdf, getVarInfo = TRUE, numRows = 10)
 ```
 
 
 # Simplified Pipelines for Data Summaries
 
 ## Data Transforms 
-### The rxDataStep Way
 
 * All the functionality exposed by the `dplyrXdf` package can also be completed
-by using the `rxDataStep` function in the `RevoScaleR` package included with your MRS installation
+by using the `rxDataStep`, `rxCube`, and `rxExec` functions in the `RevoScaleR` package included with your MRS installation
 * In fact, `dplyrXdf` consists almost entirely of wrapper functions that call on other RevoScaleR functions
-* Let's compare the workflow for adding a new column to a dataset with `rxDataStep` vs `dplyrXdf`
 
----
-
-```{r}
-taxi_xdf %>% rxGetInfo(getVarInfo = TRUE, numRows = 4)
-```
-
----
-```{r}
-taxi_transform <- RxXdfData(your_data)
-```
-
----
-
-
-```{r}
-system.time(rxDataStep(inData = taxi_xdf,
-           outFile = taxi_transform,
-           transforms = list(tip_pct = tip_amount/fare_amount),
-           overwrite = TRUE))
-```
-
-## Data Transforms 
-### The rxDataStep Way
-
-```{r}
-rxGetInfo(RxXdfData(taxi_transform), numRows = 2)
+```{r datastepway}
+rxDataStep(inData = taxi_xdf,
+           outFile = file.path(your_dir, "taxi_mutate.xdf"),
+           transforms = list(tip_pct = tip_amount/fare_amount))
 ```
 
 ## Data Transforms 
 ### The dplyrXdf Way
 
-* We could do the same operation with `dplyrXdf`, using the exact same syntax 
+* We could do common data transformation with `dplyrXdf`, using the exact same syntax 
 that we learned in the `dplyr` module and taking advantage of the `%>%` operator
+* Much more concise
 
-```{r}
+```{r dplyrXdfmutate}
 system.time(taxi_transform <- taxi_xdf %>% mutate(tip_pct = tip_amount/fare_amount))
 taxi_transform %>% rxGetInfo(numRows = 2)
 ```
@@ -164,17 +142,14 @@ taxi_transform %>% rxGetInfo(numRows = 2)
 ## Differences
 
 * The major difference between the `rxDataStep` operation and the `dplyrXdf` method, is that we do not specify an `outFile` argument anywhere in the `dplyrXdf` pipeline
-* In our case, we have assigned our `mutate` value to a new variable called `taxi_transform`
+* In our case, we have assigned our `mutate` result to a new variable called `taxi_transform`
 * This creates a temporary file to save the intermediate `xdf`, and only saves the most recent output of a pipeline, where a pipeline is defined as all operations starting from a raw xdf file.
 * To copy an *xdf* from the temporary directory to permanent storage, use the `persist` verb
 
----
-```{r}
+```{r peristXdf}
 taxi_transform@file
-```
-
-```{r}
-persist(taxi_transform, outFile = "/datadrive/alizaidi/taxiTransform.xdf") -> taxi_transform
+persist(taxi_transform, outFile = file.path(your_dir, "taxiTransform.xdf")) -> taxi_transform
+taxi_transform %>% rxGetInfo
 ```
 
 ## Using dplyrXdf for Aggregations 
@@ -182,12 +157,13 @@ persist(taxi_transform, outFile = "/datadrive/alizaidi/taxiTransform.xdf") -> ta
 
 * The `dplyrXdf` package really shines when used for data aggregations and summarizations
 * Whereas `rxSummary`, `rxCube`, and `rxCrossTabs` can compute a few summary statistics and do aggregations very quickly, they are not sufficiently general to be used in all places
----
+
 ```{r}
 taxi_group <- taxi_transform %>%
   group_by(pickup_nhood) %>%
   summarise(ave_tip = mean(tip_pct))
 taxi_group %>% head
+class(taxi_group)
 ```
 
 ## Using dplyrXdf for Aggregations 
@@ -202,28 +178,34 @@ taxi_group %>% head
 ---
 ```{r}
 rxFactors(inData = taxi_transform, 
-          outFile = "/datadrive/alizaidi/taxi_factor.xdf", 
+          outFile = file.path(your_dir, "taxi_factor.xdf"), 
           factorInfo = c("pickup_nhood"), 
           overwrite = TRUE)
+
 head(rxCube(tip_pct ~ pickup_nhood, 
             means = TRUE, 
-            data = "/datadrive/alizaidi/taxi_factor.xdf"))
-# file.remove("data/taxi_factor.xdf")
+            data = file.path(your_dir, "taxi_factor.xdf")))
 ```
 
 # Creating Functional Pipelines with dplyrXdf
+
 As we saw above, it's pretty easy to create a summarization or aggregation script. We can encapsulate our aggregation into it's own function.
 Suppose we wanted to calculate average tip as a function of dropoff and pickup neighborhoods. In the `dplyr` nonmenclature, this means grouping by dropoff and pickup neighborhoods, and summarizing/averaging tip percent.
 
 ```{r}
 rxGetInfo(taxi_transform, numRows = 5)
 ```
----
+
+Let's download our vector of manhattan neighborhoods as before. 
+
 ```{r}
 mht_url <- "http://alizaidi.blob.core.windows.net/training/manhattan.rds"
 manhattan_hoods <- readRDS(gzcon(url(mht_url)))
 ```
----
+
+Now, the major difference between `dplyr` and `dplyrXdf` so far is that `dplyr` has manipulated in-memory data.frames, where `dplyrXdf` analyzes out-of-memory XDFs. In order to ensure each R process that analyzes a chunk of XDF data has the relevant information it needs, we need to pass any additional values to each chunk using `transformObjects`. This is a list of additional objects and their values. We add this to our `dplyrXdf` methods using the `.rxArgs` argument, a catch-all for any additional `rx` functions that aren't in the core implementation of `dplyr`. 
+
+
 ```{r}
 taxi_transform %>% 
     filter(pickup_nhood %in% mht_hoods,
@@ -235,18 +217,14 @@ taxi_transform %>%
     filter(ave_dist > 3, ave_tip > 0.05) -> sum_df
 ```
 
-
-
----
+Aside from the `.rxArgs` argument, everything else is the same as before.
 
 ```{r}
 sum_df %>% rxGetInfo(getVarInfo = TRUE, numRows = 5)
 class(sum_df)
 ```
 
----
-
-Alternatively, we can encapsulate this script into a function, so that we can easily call it in a functional pipeline.
+Alternatively, we can encapsulate this script into a function, so that we can easily call it in a functional pipeline. We'll add the `...` (ellipsis) to allow for additional `.rxArgs` function when necessary.
 
 ```{r}
 taxi_hood_sum <- function(taxi_data = taxi_df, ...) {
@@ -264,8 +242,6 @@ taxi_hood_sum <- function(taxi_data = taxi_df, ...) {
 }
 
 ```
-
----
 
 The resulting summary object isn't very large (about 408 rows in this case), so it shouldn't cause any memory overhead issues if we covert it now to a `data.frame`. We can plot our results using our favorite plotting library. 
 
@@ -285,16 +261,15 @@ tile_plot_hood <- function(df = taxi_hood_sum()) {
 }
 ```
 
----
+Now, when we call `taxi_hood_sum`, we pass the additional `.rxArgs` argument as needed for `RevoScaleR`. Otherwise, the function doesn't change.
 
 ```{r}
 # tile_plot_hood(as.data.frame(sum_df))
-taxi_transform <- taxi_xdf %>% mutate(tip_pct = tip_amount/fare_amount)
 library(plotly)
 sum_df <- taxi_hood_sum(taxi_transform, 
                         .rxArgs = list(transformObjects = list(manhattan_hoods = manhattan_hoods))) %>% 
-  persist("/datadrive/alizaidi/summarized.xdf")
-ggplotly(tile_plot_hood(as.data.frame(sum_df)))
+  as.data.frame
+ggplotly(tile_plot_hood(sum_df))
 ```
 
 # Split and Combining Operations with doXdf
@@ -307,15 +282,16 @@ The `do` verb is an exception to the rule that dplyrXdf verbs write their output
 
 The doXdf verb is similar to do, but where do splits its input into one data frame per group, doXdf splits it into one xdf file per group. This allows do-like functionality with grouped data, where each group can be arbitrarily large. The syntax for the two functions is essentially the same, although the code passed to doXdf must obviously know how to handle xdfs.
 
----
-
 ```{r doXdf-models}
 taxi_models <- taxi_xdf %>% group_by(pickup_dow) %>% doXdf(model = rxLinMod(tip_amount ~ fare_amount, data = .))
 ```
 
+Let's peak at our results
+
 ```{r model-view}
-taxi_models
-taxi_models$model[[1]]
+taxi_models %>% class
+taxi_models %>% print
+taxi_models$model[[1]] %>% print
 ```
 
 
@@ -323,8 +299,6 @@ taxi_models$model[[1]]
 
 All the caveats that go with working with `data.frames` apply here. While each grouped partition is it's own `RxXdfData` object, the return value must be a `data.frame`, and hence, must fit in memory.
 Moreover, the function you apply against the splits will determine how they are operated. If you use an `rx` function, you'll get the nice fault-tolerant, parallel execution strategies the `RevoScaleR` package provides, but for any vanilla/CRAN function will work with data.frames and can easily cause your session to crash.
-
----
 
 ```{r broom-models}
 library(broom)
