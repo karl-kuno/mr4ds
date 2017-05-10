@@ -43,12 +43,14 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE, fig.align = 'center')
 * The Microsoft R Family
 * R's capabilities and it's limitations
 * What types of problems R might be useful for
-* How to manage data with the exceptionally popular open source package `dplyr`
+* How to manipulate data with the exceptionally popular open source package `dplyr`
+
+&nbsp;
 
 ### Scalable Data Analysis with Microsoft R
 
 * Breaking the Memory Barrier with XDFs
-* Using the `dplyrXdf` Package to Manipulate Data
+* Using the `dplyrXdf` Package to Manipulate Data and Train Many Models
 * Performance Considerations with the `RevoScaleR` Package
 * Modeling and Scoring with `RevoScaleR`
 
@@ -63,13 +65,15 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE, fig.align = 'center')
 * Spark SQL/DataFrames - Relational Data Processing with Spark and sparklyr
 * Sharing Metastore and Storage Accounts with Hadoop/Hive Clusters and Spark Clusters
 
+&nbsp;
+
 ### Joins and UDFs with Spark
 
 * Optimizing Joins in Spark SQL
 * Caching Spark DataFrames, Saving to Parquet
 * Understanding Spark Internals and Job Execution for Performance Optimizations
 * Monitoring Spark Applications with SparkUI and Logs
-*Developing Machine Learning Pipelines with Spark ML
+* Developing Machine Learning Pipelines with Spark ML
 
 ## Day Three
 
@@ -86,7 +90,7 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE, fig.align = 'center')
 ## Prerequisites
 ### Computing Environments
 
-* R Server 8.0.5 or above (most recent version is 9.0.2)
+* R Server 8.0.5 or above (most recent version is 9.1.0)
 * Azure Credits
 * Can use the [Linux DSVM](https://azure.microsoft.com/en-us/documentation/articles/machine-learning-data-science-linux-dsvm-intro/)
 * Or the [Windows DSVM](https://azure.microsoft.com/en-us/documentation/articles/machine-learning-data-science-provision-vm/)
@@ -107,7 +111,7 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE, fig.align = 'center')
 ### Why should I care?
 
 * R is the successor to the S Language, originated at Bell Labs AT&T
-* It is based on the Scheme interpreter
+* It is based on the Scheme programming language
 * Originally designed by two University of Auckland Professors for their introductory statistics course
 
 ![Robert Gentleman and Ross Ihaka](http://revolution-computing.typepad.com/.a/6a010534b1db25970b016766fdae38970b-800wi)
@@ -196,11 +200,8 @@ Check your CRAN mirror with `getOption("repos")`.
 ## I'm Lost! 
 ### Getting Help for R
 
-* [Stack Overflow](http://stackoverflow.com/questions/tagged/r)
-* [R Reference Card](https://cran.r-project.org/doc/contrib/Short-refcard.pdf)
-* [RStudio Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
-* [R help mailing list and archives](https://stat.ethz.ch/mailman/listinfo/r-help)
 * [Revolutions Blog](http://blog.revolutionanalytics.com/)
+* [RStudio Cheat Sheets](https://www.rstudio.com/resources/cheatsheets/)
 * [R-Bloggers](http://www.r-bloggers.com/)
-* [RSeek](rseek.org)
 * [RDocumentation](https://www.rdocumentation.org/)
+* [Microsoft R Server Tiger Blog](https://blogs.msdn.microsoft.com/microsoftrservertigerteam/)
