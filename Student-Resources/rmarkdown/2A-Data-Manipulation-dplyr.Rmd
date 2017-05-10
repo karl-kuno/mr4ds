@@ -529,7 +529,7 @@ dow_lms <- taxi_df %>% sample_n(10^4) %>%
 ---
 
 ```{r}
-dow_lms
+dow_lms %>% print
 ```
 
 
@@ -541,7 +541,7 @@ Where are our results?
 ```{r}
 summary(dow_lms$lm_tip[[1]])
 library(broom)
-dow_lms %>% tidy(lm_tip)
+dow_lms %>% tidy(lm_tip) %>% print
 ```
 
 
@@ -558,7 +558,7 @@ library(broom)
 taxi_df %>% sample_n(10^5) %>%  
   group_by(dropoff_dow) %>% 
   do(glance(lm(tip_pct ~ pickup_nhood + passenger_count + pickup_hour,
-     data = .)))
+     data = .))) %>% print
 
 ```
 
@@ -570,7 +570,8 @@ The most commonly used function in the `broom` package is the `tidy` function. T
 taxi_df %>% sample_n(10^5) %>%  
   group_by(dropoff_dow) %>% 
   do(tidy(lm(tip_pct ~ pickup_nhood + passenger_count + pickup_hour,
-     data = .)))
+     data = .))) %>% 
+  print
 ```
 
 
@@ -723,27 +724,27 @@ names(hour_plots) %>%
 Now that we have our images saved, let's read them and convert to a GIF:
 
 ```{r imageread}
-
-library(magick)
-
-imgs <- list.files("img/", full.names = TRUE)
-image_magicks <- imgs %>% map(~ image_read(.x))
-
-image_magicks
-
-## can't seem to unlist
-
-img1 <- image_read(imgs[3])
-img2 <- image_read(imgs[5])
-img3 <- image_read(imgs[7])
-img4 <- image_read(imgs[2])
-img5 <- image_read(imgs[4])
-img6 <- image_read(imgs[6])
-img7 <- image_read(imgs[1])
-
-img_c <- c(img1, img2, img3, img4, img5, img6, img7)
-
-image_animate(img_c, fps = 1)
+# 
+# library(magick)
+# 
+# imgs <- list.files("img/", full.names = TRUE)
+# image_magicks <- imgs %>% map(~ image_read(.x))
+# 
+# image_magicks
+# 
+# ## can't seem to unlist
+# 
+# img1 <- image_read(imgs[3])
+# img2 <- image_read(imgs[5])
+# img3 <- image_read(imgs[7])
+# img4 <- image_read(imgs[2])
+# img5 <- image_read(imgs[4])
+# img6 <- image_read(imgs[6])
+# img7 <- image_read(imgs[1])
+# 
+# img_c <- c(img1, img2, img3, img4, img5, img6, img7)
+# 
+# image_animate(img_c, fps = 1)
 
 ```
 
