@@ -2,14 +2,14 @@
 title: "Lab 1 - Data Structures"
 author: "Ali Zaidi"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-output: tutor::tutorial
+output: learnr::tutorial
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 random_norms <- rnorm(100)
 some_letters <- letters[1:10]
-library(tutor)
+library(learnr)
 ```
 
 # R Primitives
@@ -56,35 +56,36 @@ library(tutor)
     + subsetting a list with a single square bracket always returns a list
 + To subset a list and get back just that element, use `[[ ]]`
 
+### Exercise -- Vectors
 
-### Exercise
+First exercise, create a vector of ten elements. Use square brackets to subset first element, and then again for the first three elements.
 
-+ Use `c` to create a vector of numbers, separate them by using a comma.
-+ You can also use the `seq` function to create a sequence of numbers. `seq` has three arguments: 1. start, 2. stop, 3. increments
-+ For a sequence of numbers, you can use `:`
-+ Use the single square brackets to subset the first element
-+ Use the single square brackets to subset the second and fourth elements
+```{r vecsub, exercise=TRUE}
+# Create a vector of 10 numbers between 1 and 10
+vec <- 1:10
+# subset the first element
+vec[]
+# subset the first through third elements
 
-```{r datastructs, exercise=TRUE}
+```
 
-vector <- c(1)
+```{r vecsub-solution}
 
-seq(0, 10, 2)
-
-a <- 
-b <- 
-vector_num_1 <- a:b
-
+# subset the first element
+vec[1]
+# subset the first through third elements
+vec[1:3]
 
 ```
 
 
-### Object Representation
+## Object Representation
 
 + To find the type of an object, use `class` (_higher level representation_)
 + To find how the object is stored in memory, use `typeof` (_lower level representation_)
++ To display the interal structure of an object, type `str`
 
-## Vectors 
+### Vectors 
 
 Use the `typeof` function to explore the data structure's low-level structure, and the `class` object to see the object's higher level structure.
 
@@ -120,11 +121,18 @@ combine_char_num <- c(random_norms, some_letters)
 
 ```
 
+```{r coercion-solution}
+
+# check the type of combine_char_num
+typeof(combine_char_num)
+```
+
+
 ## Lists
 
 to combine types, make list
 
-```{r list, exercise=TRUE}
+```{r makelist, exercise=TRUE}
 random_norms <- rnorm(100)
 some_letters <- letters[1:10]
 
@@ -133,22 +141,32 @@ typeof(list_char_num)
 lapply(list_char_num, typeof)
 ```
 
-## Matrices
+### Exercise -- Lists
 
-matrices, same length, same type
+Let's see how subsetting works on lists. Let's create a list of multiple vectors. First element will be a vector of 100 random numbers from the Gaussian distribution. The next element will be a vector of letters from the built in `letters` vector. Check types and classes as you go along.
 
-```{r matrices, exercise=TRUE}
-matrix_num <- matrix(rnorm(10), nrow = 5, ncol = 2)
-# what happens if you mix types?
-matrix_mix <- matrix(c(rnorm(10), letters[1:10]), nrow = 10, ncol = 2)
+```{r list, exercise=TRUE}
+my_list <- list(num = rnorm(100), chars = letters[1:10])
+# subset first element using single square brackets
+my_list[1]
+# check it's type with typeof
+
+# use two square brackets and select second element
+
+# check it's type
+
 ```
 
-be careful about specifying matrices, as they will auto-fill when there is an insufficient amount of elements;
 
-```{r matrices-filling}
-matrix_num_reuse <- matrix(rnorm(11), nrow = 6, ncol = 4)
+```{r list-solution}
+
+# check it's type with typeof
+typeof(my_list[1])
+# use two square brackets and select second element
+my_list[[2]]
+# check it's type
+typeof(my_list[[2]])
 ```
-
 
 ## data.frames
 
@@ -159,46 +177,29 @@ df_char_num <- data.frame(chars = letters[1:10], nums = rnorm(10))
 lapply(df_char_num, typeof)
 
 ## data.frames must have same length in each column
-
-# df_char_num <- data.frame(chars = letters[1:8], nums = rnorm(10))
-
 ```
 
-## Helpful Functions
+### Working with data.frames
 
+The elements of a data.frames are vectors.
 
-```{r help, exercise=TRUE}
+Let's use some common vector functions like `mean` on the numeric values of a data.frame.
 
-# see your workspace
-ls()
+```{r mean, exercise=TRUE}
+df_char_num <- data.frame(chars = letters[1:10], nums = rnorm(10))
+# use str to see the structure of a data.frame
+str(df_char_num)
+# use summary for quick five-point summarizations
+summary(df_char_num)
+# select the first column of a data.frame
+# what's the difference between
+df_char_num[1]
+# and
+df_char_num[[1]]
+# calculate the mean of the first column
+```
 
-
-# check working directory, change directory
-getwd()
-setwd(getwd())
-
-# create a sequence of numbers
-1:10
-seq(1, 10)
-seq(1, 10, 2)
-
-# get help
-?seq
-help(seq)
-
-# type tests
-
-is.character(some_letters)
-is.numeric(some_letters)
-is.atomic(some_letters)
-is.atomic(df_char_num)
-
-# remove object from workspace
-rm(some_letters)
-
-# remove all visible objects
-
-rm(list = ls())
-
+```{r mean-solution}
+mean(df_char_num[[1]])
 ```
 
