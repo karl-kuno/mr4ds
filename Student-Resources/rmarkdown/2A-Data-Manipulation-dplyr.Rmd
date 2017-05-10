@@ -515,6 +515,16 @@ taxi_df %>% group_by(dropoff_dow) %>%
          fare_amount, dropoff_nhood, pickup_nhood)
 ```
 
+Perhaps a more interesting example, we can calculate many quantiles quickly per a specific group:
+
+```{r tips_range}
+taxi_df %>% group_by(payment_type) %>% 
+  do(p = data.frame(quantile(.$tip_amount, 
+                             probs = c(0, 2.5, 5, 10, 25, 50, 75, 95, 97.5, 100)/100))) %>%
+  unnest(p) %>% rename_(quantiles = names(.)[2])
+```
+
+
 ## Estimating Multiple Models with do
 
 * A common use of `do` is to calculate many different models by a grouping variable
@@ -526,7 +536,7 @@ dow_lms <- taxi_df %>% sample_n(10^4) %>%
      data = .))
 ```
 
----
+Let's look at our results:
 
 ```{r}
 dow_lms %>% print
