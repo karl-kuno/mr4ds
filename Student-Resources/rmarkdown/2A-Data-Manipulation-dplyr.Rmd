@@ -518,6 +518,7 @@ taxi_df %>% group_by(dropoff_dow) %>%
 Perhaps a more interesting example, we can calculate many quantiles quickly per a specific group:
 
 ```{r tips_range}
+library(tidyr)
 taxi_df %>% group_by(payment_type) %>% 
   do(p = data.frame(quantile(.$tip_amount, 
                              probs = c(0, 2.5, 5, 10, 25, 50, 75, 95, 97.5, 100)/100))) %>%
@@ -687,8 +688,8 @@ theme_map_dark <- function(palate_color = "Greys") {
 map_nyc <- function(df, pickup_hr) {
   
   gplot <- ggplot(df, 
-                  aes(x=..., 
-                      y=...)) +
+                  aes(x=pickup_longitude, 
+                      y=pickup_latitude)) +
     geom_point(color="white", size=0.06) +
     scale_x_continuous(limits=c(min_long, max_long)) +
     scale_y_continuous(limits=c(min_lat, max_lat)) +
@@ -735,24 +736,24 @@ Now that we have our images saved, let's read them and convert to a GIF:
 
 ```{r imageread}
 # 
-# library(magick)
-# 
-# imgs <- list.files("img/", full.names = TRUE)
-# image_magicks <- imgs %>% map(~ image_read(.x))
-# 
-# image_magicks
-# 
-# ## can't seem to unlist
-# 
-# img1 <- image_read(imgs[3])
-# img2 <- image_read(imgs[5])
-# img3 <- image_read(imgs[7])
-# img4 <- image_read(imgs[2])
-# img5 <- image_read(imgs[4])
-# img6 <- image_read(imgs[6])
-# img7 <- image_read(imgs[1])
-# 
-# img_c <- c(img1, img2, img3, img4, img5, img6, img7)
+library(magick)
+
+imgs <- list.files("img/", full.names = TRUE)
+image_magicks <- imgs %>% map(~ image_read(.x))
+
+image_magicks
+
+## can't seem to unlist
+
+img1 <- image_read(imgs[3])
+img2 <- image_read(imgs[5])
+img3 <- image_read(imgs[7])
+img4 <- image_read(imgs[2])
+img5 <- image_read(imgs[4])
+img6 <- image_read(imgs[6])
+img7 <- image_read(imgs[1])
+
+img_c <- c(img1, img2, img3, img4, img5, img6, img7)
 # 
 # image_animate(img_c, fps = 1)
 
