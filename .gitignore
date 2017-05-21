@@ -1,5 +1,6 @@
-## ignore registrations list
+## don't include regs and src files
 Registrations/
+etc/
 
 ## project files
 *.Rhistory
