@@ -20,7 +20,7 @@ During class, pleae review the links and information below:
 
 ## Class Links
 
-+ [course webpage](https://azure.github.io/mr4ds/)
++ [course webpage](https://azure.github.io/LearnAnalytics-mr4ds/)
 + [gitter page](https://gitter.im/mr4ds/Lobby)
     * we are going to try and use gitter as a discussion forum for anything related to the course materials, and Microsoft R Server more generally
 + [Course wiki](https://github.com/Azure/mr4ds/wiki)
