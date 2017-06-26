@@ -47,10 +47,7 @@ Please refer to the [course syllabus](https://github.com/akzaidi/R-cadence/wiki/
 
 We will use DSVMs (Data Science Virtual Machines) from the Azure marketplace to run the course materials. For the Spark training, we will use Spark HDInsight Premium clusters, also from Azure. If you are interested in running these materials in a different environment, see the course [wiki](https://github.com/akzaidi/R-cadence/wiki) for instructions. 
 
-+ JupyterHub:
-    * https://sampads.eastus2.cloudapp.azure.com:8000
-+ RStudio Server:
-    * http://sampads.eastus2.cloudapp.azure.com:8787/
+You can download R client locally using the Dockerfile [here](https://github.com/akzaidi/mrclient-docker).
    
 ### Credentials
 
