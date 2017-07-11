@@ -88,12 +88,17 @@ DeployR: web service development kit through APIs, java, js, .net
 ### Create a local directory to save XDF
 
 ```{r}
-your_name <- system('whoami', intern = TRUE)
-your_dir <- paste0('/home/', your_name)
+your_name <- "data"
+your_dir <- file.path(getwd(), your_name)
 # File Path to your Data
 your_data <- file.path(your_dir, 'tripdata_2015.xdf')
 if (!(dir.exists(your_dir))) dir.create(your_dir)
-file.copy("/home/sharedData/tripdata_2015.xdf", your_data, overwrite = TRUE)
+# if running on shared server
+# file.copy("/home/sharedData/tripdata_2015.xdf", your_data, overwrite = TRUE)
+# if running on your own:
+download.file("https://alizaidi.blob.core.windows.net/training/trainingData/manhattan.xdf", 
+              destfile = your_data,
+              mode = "wb")
 setXdfTblDir(file.path(your_dir, "tmpXdf"))
 ```
 
