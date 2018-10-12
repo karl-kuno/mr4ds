@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Ali Zaidi, alizaidi@microsoft.com" />
-  <meta name="dcterms.date" content="2016-11-28" />
+  <meta name="dcterms.date" content="2017-02-26" />
   <title>Introduction to R: Functional, Object-Based Computing for Data Analysis</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -123,7 +123,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <section>
     <h1 class="title">Introduction to R: <em>Functional, Object-Based Computing for Data Analysis</em></h1>
     <h2 class="author"><a href="mailto:alizaidi@microsoft.com">Ali Zaidi, alizaidi@microsoft.com</a></h2>
-    <h3 class="date">November 28, 2016</h3>
+    <h3 class="date">February 26, 2017</h3>
 </section>
 
 <section><section id="course-logistics" class="titleslide slide level1"><h1>Course Logistics</h1></section><section id="day-one" class="slide level2">
@@ -161,11 +161,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Prerequisites</h1>
 <h3 id="computing-environments">Computing Environments</h3>
 <ul>
-<li class="fragment">R Server 8.0.5 or above</li>
+<li class="fragment">R Server 8.0.5 or above (most recent version is 9.0.2)</li>
 <li class="fragment">Azure Credits</li>
 <li class="fragment">Can use the <a href="https://azure.microsoft.com/en-us/documentation/articles/machine-learning-data-science-linux-dsvm-intro/">Linux DSVM</a></li>
 <li class="fragment">Or the <a href="https://azure.microsoft.com/en-us/documentation/articles/machine-learning-data-science-provision-vm/">Windows DSVM</a></li>
-<li class="fragment">For IDE: use <a href="https://www.visualstudio.com/vs/rtvs/">RTVS</a>, <a href="https://www.rstudio.com/products/rstudio/download3/">RStudio Server</a>, <a href="https://jupyterhub.readthedocs.io/en/latest/">JupyterHub</a>, <a href="http://jupyterlab-tutorial.readthedocs.io/en/latest/">JupyterLab</a>…
+<li class="fragment">For IDE: choises are <a href="https://www.visualstudio.com/vs/rtvs/">RTVS</a>, <a href="https://www.rstudio.com/products/rstudio/download3/">RStudio Server</a>, <a href="https://jupyterhub.readthedocs.io/en/latest/">JupyterHub</a>, <a href="http://jupyterlab-tutorial.readthedocs.io/en/latest/">JupyterLab</a>…
 <ul>
 <li class="fragment">Whatever you’re comfortable with!</li>
 </ul></li>
@@ -177,8 +177,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="fragment">The most popular integrated development environment for R is <a href="https://www.rstudio.com/">RStudio</a></li>
 <li class="fragment">The RStudio IDE is entirely html/javascript based, so completely cross-platform</li>
 <li class="fragment">RStudio Server provides a full IDE in your browser: perfect for cloud instances</li>
-<li class="fragment">For Windows machines, we have recently announced the general availability of <a href="https://www.visualstudio.com/en-us/features/rtvs-vs.aspx">R Tools for Visual Studio, RTVS</a></li>
-<li class="fragment">RTVS supports connectivity to Azure and SQL Server</li>
+<li class="fragment">For Windows machines, 2016 provided general availability of <a href="https://www.visualstudio.com/en-us/features/rtvs-vs.aspx">R Tools for Visual Studio, RTVS</a></li>
+<li class="fragment">RTVS supports connectivity to Azure and SQL Server for remote connectivity</li>
 </ul>
 </section><section id="what-is-r" class="slide level2">
 <h1>What is R?</h1>
@@ -235,6 +235,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="fragment">Data capacity limited by memory</li>
 <li class="fragment">Single-threaded</li>
 </ul>
+</section><section id="distributions-of-r" class="slide level2">
+<h1>Distributions of R</h1>
+<p><img src="/datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/images/distros_r.png" /></p>
 </section><section id="some-essential-open-source-packages" class="slide level2">
 <h1>Some Essential Open Source Packages</h1>
 <ul>
@@ -357,10 +360,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li class="fragment">To find the type of an object, use <code>class</code> (<em>higher level representation</em>)</li>
 <li class="fragment">To find how the object is stored in memory, use <code>typeof</code> (<em>lower level representation</em>)</li>
-<li class="fragment">Good time to do Lab 0!</li>
+<li class="fragment">Good time to do Lab 1!</li>
 </ul>
 </section></section>
-<section><section id="data-manipulation-with-the-dplyr-package" class="titleslide slide level1"><h1>Data Manipulation with the dplyr Package</h1></section><section id="overview" class="slide level2">
+<section><section id="data-manipulation-with-the-dplyr-package" class="titleslide slide level1"><h1>Data Manipulation with the <code>dplyr</code> Package</h1></section><section id="overview" class="slide level2">
 <h1>Overview</h1>
 <p>Rather than describing the nitty gritty details of writing R code, I’d like you to get started at immediately writing R code.</p>
 <p>As most of you are data scientists/data enthusiasts, I will showcase one of the most useful data manipulation packages in R, <code>dplyr</code>. At the end of this session, you will have learned:</p>
@@ -449,27 +452,29 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(stringr)
-taxi_url &lt;-<span class="st"> &quot;http://alizaidi.blob.core.windows.net/training/taxi_df.rds&quot;</span>
+taxi_url &lt;-<span class="st"> &quot;http://alizaidi.blob.core.windows.net/training/trainingData/manhattan_df.rds&quot;</span>
 taxi_df  &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">gzcon</span>(<span class="kw">url</span>(taxi_url)))
 (taxi_df &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(taxi_df))</code></pre></div>
-<pre><code>## # A tibble: 3,770,319 × 16
-##    VendorID passenger_count trip_distance RateCodeID store_and_fwd_flag
-##       &lt;chr&gt;           &lt;int&gt;         &lt;dbl&gt;      &lt;chr&gt;              &lt;chr&gt;
-## 1         1               1          1.80          1                  N
-## 2         1               2          0.90          1                  N
-## 3         1               1          0.90          1                  N
-## 4         1               1          0.30          1                  N
-## 5         2               1          0.96          1                  N
-## 6         2               1          2.01          1                  N
-## 7         2               3          3.14          1                  N
-## 8         1               1          0.50          1                  N
-## 9         2               1          0.67          1                  N
-## 10        2               1         15.20          2                  N
-## # ... with 3,770,309 more rows, and 11 more variables: payment_type &lt;chr&gt;,
-## #   fare_amount &lt;dbl&gt;, tip_amount &lt;dbl&gt;, tolls_amount &lt;dbl&gt;,
-## #   pickup_hour &lt;chr&gt;, pickup_dow &lt;chr&gt;, dropoff_hour &lt;chr&gt;,
-## #   dropoff_dow &lt;chr&gt;, pickup_nhood &lt;chr&gt;, dropoff_nhood &lt;chr&gt;,
-## #   kSplits &lt;chr&gt;</code></pre>
+<pre><code>## # A tibble: 5,000,000 × 21
+##    VendorID passenger_count trip_distance pickup_longitude pickup_latitude
+##       &lt;int&gt;           &lt;int&gt;         &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+## 1         1               1          1.40        -74.00555        40.72562
+## 2         2               2          4.58        -73.98419        40.73022
+## 3         2               5          9.63        -73.97183        40.76273
+## 4         1               1          1.70        -73.96131        40.77190
+## 5         1               2          0.60        -73.99568        40.72430
+## 6         1               1          4.10        -73.95731        40.76214
+## 7         2               5          1.76        -73.99208        40.72919
+## 8         2               1          2.68        -73.95257        40.78289
+## 9         2               1          1.69        -73.94909        40.78134
+## 10        2               1          1.16        -73.98251        40.76832
+## # ... with 4,999,990 more rows, and 16 more variables: RatecodeID &lt;int&gt;,
+## #   store_and_fwd_flag &lt;chr&gt;, dropoff_longitude &lt;dbl&gt;,
+## #   dropoff_latitude &lt;dbl&gt;, payment_type &lt;int&gt;, fare_amount &lt;dbl&gt;,
+## #   tip_amount &lt;dbl&gt;, tolls_amount &lt;dbl&gt;, tip_percent &lt;dbl&gt;,
+## #   pickup_hour &lt;fctr&gt;, pickup_dow &lt;fctr&gt;, dropoff_hour &lt;fctr&gt;,
+## #   dropoff_dow &lt;fctr&gt;, trip_duration &lt;int&gt;, pickup_nhood &lt;fctr&gt;,
+## #   dropoff_nhood &lt;fctr&gt;</code></pre>
 </section></section>
 <section><section id="filtering-and-reordering-data" class="titleslide slide level1"><h1>Filtering and Reordering Data</h1></section><section id="subsetting-data" class="slide level2">
 <h1>Subsetting Data</h1>
@@ -484,30 +489,33 @@ taxi_df  &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span cla
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(taxi_df,
        dropoff_dow %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Fri&quot;</span>, <span class="st">&quot;Sat&quot;</span>, <span class="st">&quot;Sun&quot;</span>),
        tip_amount &gt;<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
-<pre><code>## # A tibble: 859,165 × 16
-##    VendorID passenger_count trip_distance RateCodeID store_and_fwd_flag
-##       &lt;chr&gt;           &lt;int&gt;         &lt;dbl&gt;      &lt;chr&gt;              &lt;chr&gt;
-## 1         1               2          0.90          1                  N
-## 2         1               1          0.90          1                  N
-## 3         2               1          2.01          1                  N
-## 4         2               3          3.14          1                  N
-## 5         2               1          6.08          1                  N
-## 6         2               1          1.96          1                  N
-## 7         1               1          0.40          1                  N
-## 8         1               2          1.70          1                  N
-## 9         1               2          0.60          1                  N
-## 10        1               2          9.30          1                  N
-## # ... with 859,155 more rows, and 11 more variables: payment_type &lt;chr&gt;,
-## #   fare_amount &lt;dbl&gt;, tip_amount &lt;dbl&gt;, tolls_amount &lt;dbl&gt;,
-## #   pickup_hour &lt;chr&gt;, pickup_dow &lt;chr&gt;, dropoff_hour &lt;chr&gt;,
-## #   dropoff_dow &lt;chr&gt;, pickup_nhood &lt;chr&gt;, dropoff_nhood &lt;chr&gt;,
-## #   kSplits &lt;chr&gt;</code></pre>
+<pre><code>## # A tibble: 1,120,381 × 21
+##    VendorID passenger_count trip_distance pickup_longitude pickup_latitude
+##       &lt;int&gt;           &lt;int&gt;         &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+## 1         2               5          1.76        -73.99208        40.72919
+## 2         1               1          3.20        -73.98829        40.76429
+## 3         2               3          1.86        -73.97189        40.75711
+## 4         1               2         17.30        -73.78173        40.64448
+## 5         1               1          1.30        -73.94249        40.79044
+## 6         1               1          2.80        -73.96978        40.75972
+## 7         2               1          4.65        -73.98398        40.73781
+## 8         1               2          1.50        -73.96262        40.77548
+## 9         2               2          0.83        -73.97236        40.78106
+## 10        2               6         11.32        -73.98249        40.76269
+## # ... with 1,120,371 more rows, and 16 more variables: RatecodeID &lt;int&gt;,
+## #   store_and_fwd_flag &lt;chr&gt;, dropoff_longitude &lt;dbl&gt;,
+## #   dropoff_latitude &lt;dbl&gt;, payment_type &lt;int&gt;, fare_amount &lt;dbl&gt;,
+## #   tip_amount &lt;dbl&gt;, tolls_amount &lt;dbl&gt;, tip_percent &lt;dbl&gt;,
+## #   pickup_hour &lt;fctr&gt;, pickup_dow &lt;fctr&gt;, dropoff_hour &lt;fctr&gt;,
+## #   dropoff_dow &lt;fctr&gt;, trip_duration &lt;int&gt;, pickup_nhood &lt;fctr&gt;,
+## #   dropoff_nhood &lt;fctr&gt;</code></pre>
 </section><section id="exercise" class="slide level2">
 <h1>Exercise</h1>
 <p>Your turn:</p>
 <ul>
 <li class="fragment">How many observations started in Harlem?</li>
 <li class="fragment">pick both sides of Harlem, including east harlem</li>
+<li class="fragment"><em>hint</em>: it might be useful to use the <code>str_detect</code> function from <code>stringr</code></li>
 <li class="fragment">How many observations that started in Harlem ended in the Financial District?</li>
 </ul>
 </section><section id="solution" class="slide level2">
@@ -515,100 +523,569 @@ taxi_df  &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span cla
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
 <span class="kw">table</span>(taxi_df$pickup_nhood)</code></pre></div>
 <pre><code>## 
-##            Ardon Heights Astoria-Long Island City               Auburndale 
-##                        1                    18553                       19 
-##             Battery Park                Bay Ridge               Baychester 
-##                    31427                      172                        8 
-##             Bedford Park       Bedford-Stuyvesant              Bensonhurst 
-##                       92                     3179                       95 
-##              Boerum Hill             Borough Park              Brownsville 
-##                     4400                      521                       85 
-##                 Bushwick                 Canarsie            Carnegie Hill 
-##                     1645                       85                    43052 
-##          Carroll Gardens             Central Park                  Chelsea 
-##                     5701                    47925                   257981 
-##                Chinatown              City Island                Clearview 
-##                    12102                        2                        8 
-##                  Clifton                  Clinton              Cobble Hill 
-##                        2                   117715                     2099 
-##                   Corona             Country Club  Douglastown-Little Neck 
-##                      119                       31                       68 
-##                 Downtown            Dyker Heights            East Brooklyn 
-##                     7148                       32                      120 
-##              East Harlem             East Village              Eastchester 
-##                    12161                   138604                        8 
-##       Financial District                 Flatbush                 Flushing 
-##                    76964                        2                      354 
-##                  Fordham             Forest Hills               Fort Green 
-##                       83                     1227                     9997 
-##         Garment District                 Glendale                 Gramercy 
-##                   213613                       61                   304905 
-## Gravesend-Sheepshead Bay        Greenwich Village                Greenwood 
-##                      163                   177965                      516 
-##         Hamilton Heights                   Harlem              High Bridge 
-##                     7543                    19864                      413 
-##             Howland Hook              Hunts Point                   Inwood 
-##                        2                       46                      312 
-##          Jackson Heights                  Jamaica             Kings Bridge 
-##                     3606                      784                      110 
-##                Laurelton             Little Italy          Lower East Side 
-##                       26                    33178                    89114 
-##       Mapleton-Flatlands          Mariners Harbor                  Maspeth 
-##                      393                        1                      290 
-##           Middle Village            Midland Beach                  Midtown 
-##                      100                        3                   625350 
-##      Morningside Heights           Morris Heights              Morris Park 
-##                    19741                      118                       64 
-##               Mott Haven              Murray Hill             New Brighton 
-##                     1309                   127663                       12 
-##             Nkew Gardens        North Sutton Area                  Oakwood 
-##                      459                    39678                        4 
-##               Park Slope              Parkchester           Queens Village 
-##                     3966                      113                       26 
-##          Queensboro Hill             Richmondtown                Ridgewood 
-##                       41                        3                      239 
-##                Riverdale              Saintalbans                     Soho 
-##                       53                       22                    78794 
-##                Soundview              South Beach              South Bronx 
-##                       89                        4                      421 
-##      Springfield Gardens           Spuyten Duyvil                 Steinway 
-##                       68                       17                        7 
-##               Sunny Side              Sunset Park            The Rockaways 
-##                    12493                      269                       34 
-##             Throggs Neck                Todt Hill                  Tremont 
-##                       33                        3                      109 
-##                  Tribeca               Union Port       University Heights 
-##                    63171                       58                       95 
-##          Upper East Side          Upper West Side                   Utopia 
-##                   513594                   313849                      391 
-## Wakefield-Williamsbridge       Washington Heights             West Village 
-##                       39                     4870                    90656 
-##    Westerleigh-Castleton          Williams Bridge             Williamsburg 
-##                        2                       26                    15521 
-##  Woodhaven-Richmond Hill        Woodlawn-Nordwood                 Woodside 
-##                      218                       25                     3151 
-##                Yorkville 
-##                    25353</code></pre>
+##                              Annadale 
+##                                     0 
+##                         Arden Heights 
+##                                     0 
+##                              Arrochar 
+##                                     3 
+##                               Arverne 
+##                                     6 
+##                               Astoria 
+##                                 23432 
+##                       Astoria Heights 
+##                                   552 
+##                            Auburndale 
+##                                    16 
+##                            Bath Beach 
+##                                    46 
+##                          Battery Park 
+##                                 50258 
+##                             Bay Ridge 
+##                                   154 
+##                           Bay Terrace 
+##                                     7 
+##                            Baychester 
+##                                     4 
+##                               Bayside 
+##                                    25 
+##                          Bedford Park 
+##                                    48 
+##                    Bedford Stuyvesant 
+##                                  4560 
+##                          Belle Harbor 
+##                                     1 
+##                             Bellerose 
+##                                    23 
+##                               Belmont 
+##                                    33 
+##                           Bensonhurst 
+##                                    70 
+##                          Bergen Beach 
+##                                     5 
+##                            Blissville 
+##                                   132 
+##                            Bloomfield 
+##                                     3 
+##                           Boerum Hill 
+##                                  3734 
+##                          Borough Park 
+##                                    60 
+##                          Breezy Point 
+##                                     2 
+##                             Briarwood 
+##                                   285 
+##                        Brighton Beach 
+##                                    34 
+##                         Broad Channel 
+##                                     2 
+##                            Bronx Park 
+##                                    14 
+##                      Brooklyn Heights 
+##                                  5876 
+##                           Brownsville 
+##                                    78 
+##                            Bulls Head 
+##                                     3 
+##                              Bushwick 
+##                                  1877 
+##                          Butler Manor 
+##                                     0 
+##                       Cambria Heights 
+##                                    12 
+##                              Canarsie 
+##                                   102 
+##                         Carnegie Hill 
+##                                 56133 
+##                       Carroll Gardens 
+##                                  3807 
+##                           Castle Hill 
+##                                    19 
+##                     Castleton Corners 
+##                                     2 
+##                          Central Park 
+##                                 68716 
+##                            Charleston 
+##                                     0 
+##                               Chelsea 
+##                                237331 
+##                        Chelsea-Travis 
+##                                     1 
+##                             Chinatown 
+##                                 16261 
+##                           City Island 
+##                                     5 
+##                          Clason Point 
+##                                     0 
+##                               Clifton 
+##                                     8 
+##                               Clinton 
+##                                154194 
+##                          Clinton Hill 
+##                                  2007 
+##                            Clove Lake 
+##                                     0 
+##                            Co-op City 
+##                                    20 
+##                           Cobble Hill 
+##                                  2122 
+##                         College Point 
+##                                    55 
+##   Columbia Street Waterfront District 
+##                                   286 
+##                       Columbus Circle 
+##                                 80557 
+##                             Concourse 
+##                                   862 
+##                          Coney Island 
+##                                    20 
+##                                Corona 
+##                                   434 
+##                          Country Club 
+##                                     3 
+##                         Crown Heights 
+##                                  2001 
+##                          Dongan Hills 
+##                                     1 
+##                Douglaston-Little Neck 
+##                                     7 
+##                              Downtown 
+##                                  9444 
+##                                 DUMBO 
+##                                  1720 
+##                         Dyker Heights 
+##                                    32 
+##                         East Elmhurst 
+##                                  2887 
+##                         East Flatbush 
+##                                   278 
+##                           East Harlem 
+##                                 49635 
+##              East Jamaica Bay Islands 
+##                                     1 
+##                         East New York 
+##                                   287 
+##                          East Tremont 
+##                                    54 
+##                          East Village 
+##                                180604 
+##                           Eastchester 
+##                                     5 
+##                              Elm Park 
+##                                     0 
+##                              Elmhurst 
+##                                  2244 
+##                           Eltingville 
+##                                     1 
+##                          Emerson Hill 
+##                                     1 
+##                          Far Rockaway 
+##                                    24 
+##                             Fieldston 
+##                                    11 
+##                    Financial District 
+##                                 96110 
+##                              Flatbush 
+##                                   896 
+##                     Flatiron District 
+##                                319998 
+##                             Flatlands 
+##                                    85 
+##                           Floral park 
+##                                    13 
+##                   Floyd Bennett Field 
+##                                     6 
+##                              Flushing 
+##                                   341 
+##          Flushing Meadows Corona Park 
+##                                   280 
+##                               Fordham 
+##                                    67 
+##                          Forest Hills 
+##                                   997 
+##                  Forest Hills Gardens 
+##                                     8 
+##                           Fort Greene 
+##                                  5164 
+##                         Fort Hamilton 
+##                                    86 
+##                           Fort Tilden 
+##                                     0 
+##                        Fort Wadsworth 
+##                                     3 
+##                           Fresh Kills 
+##                                     0 
+##                      Fresh Kills Park 
+##                                     0 
+##                         Fresh Meadows 
+##                                    29 
+##                      Garment District 
+##                                296479 
+##                            Georgetown 
+##                                     6 
+##                       Gerritsen Beach 
+##                                     1 
+##                             Glen Oaks 
+##                                     5 
+##                              Glendale 
+##                                    42 
+##                      Governors Island 
+##                                     1 
+##                               Gowanus 
+##                                  2226 
+##                              Gramercy 
+##                                170535 
+##                          Graniteville 
+##                                     0 
+##                            Grant City 
+##                                     0 
+##                    Grasmere - Concord 
+##                                     3 
+##                             Gravesend 
+##                                    59 
+##                           Great Kills 
+##                                     1 
+##                            Greenpoint 
+##                                  4106 
+##                            Greenridge 
+##                                     0 
+##                     Greenwich Village 
+##                                210108 
+##                             Greenwood 
+##                                   647 
+##                           Grymes Hill 
+##                                     2 
+##                      Hamilton Heights 
+##                                  6657 
+##                                Harlem 
+##                                 22344 
+##                     Heartland Village 
+##                                     1 
+##                           High Bridge 
+##                                   153 
+##                             Hillcrest 
+##                                    43 
+##                                Hollis 
+##                                    93 
+##                            Holliswood 
+##                                     5 
+##                             Homecrest 
+##                                    40 
+##                          Howard Beach 
+##                                    29 
+##                              Huguenot 
+##                                     0 
+##                         Hunters Point 
+##                                  7163 
+##                           Hunts Point 
+##                                    11 
+##                                Inwood 
+##                                   438 
+##                       Jackson Heights 
+##                                  1478 
+##                       Jacob Riis Park 
+##                                     0 
+##                               Jamaica 
+##                                  1386 
+##                       Jamaica Estates 
+##                                    22 
+##                         Jamaica Hills 
+##                                    64 
+## John F. Kennedy International Airport 
+##                                111064 
+##                            Kensington 
+##                                   447 
+##                           Kew Gardens 
+##                                   250 
+##                     Kew Gardens Hills 
+##                                   102 
+##                           Kingsbridge 
+##                                   106 
+##                    La Guardia Airport 
+##                                127232 
+##                      La Tourette Park 
+##                                     0 
+##                             Laurelton 
+##                                    25 
+##                        Liberty Island 
+##                                     0 
+##                       Lighthouse Hill 
+##                                     0 
+##                          Little Italy 
+##                                 38778 
+##                              Longwood 
+##                                    67 
+##                       Lower East Side 
+##                                103048 
+##                                 Malba 
+##                                     1 
+##                       Manhattan Beach 
+##                                     6 
+##                        Manhattanville 
+##                                  3181 
+##                           Marble Hill 
+##                                    54 
+##                           Marine Park 
+##                                    12 
+##                      Mariner&#39;s Harbor 
+##                                     0 
+##                               Maspeth 
+##                                   801 
+##                        Meiers Corners 
+##                                     0 
+##                               Melrose 
+##                                   197 
+##                        Middle Village 
+##                                    76 
+##                         Midland Beach 
+##                                     3 
+##                               Midtown 
+##                                575401 
+##                               Midwood 
+##                                    82 
+##                            Mill Basin 
+##                                    11 
+##                        Mill Rock Park 
+##                                     0 
+##                   Morningside Heights 
+##                                 23385 
+##                        Morris Heights 
+##                                   106 
+##                           Morris Park 
+##                                    46 
+##                            Mott Haven 
+##                                   911 
+##                           Murray Hill 
+##                                125374 
+##                             Navy Yard 
+##                                    72 
+##                              Neponsit 
+##                                     0 
+##                          New Brighton 
+##                                    37 
+##                              New Dorp 
+##                                     0 
+##                        New Dorp Beach 
+##                                     0 
+##                       New Springville 
+##                                     1 
+##                           New Utrecht 
+##                                    20 
+##                                  NoHo 
+##                                 46345 
+##                       North Riverdale 
+##                                    20 
+##                               Norwood 
+##                                    43 
+##                       Oakland Gardens 
+##                                     8 
+##                               Oakwood 
+##                                     3 
+##                            Ocean Hill 
+##                                   115 
+##                         Ocean Parkway 
+##                                   167 
+##                              Old Town 
+##                                     0 
+##                            Ozone Park 
+##                                   124 
+##                             Park Hill 
+##                                     2 
+##                            Park Slope 
+##                                  6947 
+##                           Parkchester 
+##                                    82 
+##                            Pelham Bay 
+##                                    23 
+##                       Pelham Bay Park 
+##                                     2 
+##                        Pelham Gardens 
+##                                    21 
+##                       Pleasant Plains 
+##                                     0 
+##                               Pomonok 
+##                                     8 
+##                            Port Ivory 
+##                                     1 
+##                           Port Morris 
+##                                   296 
+##                         Port Richmond 
+##                                     2 
+##                          Prince&#39;s Bay 
+##                                     1 
+##                      Prospect Heights 
+##                                  2594 
+##             Prospect Lefferts Gardens 
+##                                   638 
+##                         Prospect Park 
+##                                   157 
+##                   Prospect Park South 
+##                                    37 
+##                        Queens Village 
+##                                    69 
+##                         Randall Manor 
+##                                     1 
+##                  Randals-Wards Island 
+##                                   327 
+##                              Red Hook 
+##                                   445 
+##                             Rego Park 
+##                                   510 
+##                         Richmond Hill 
+##                                   150 
+##                         Richmond Town 
+##                                     1 
+##                       Richmond Valley 
+##                                     0 
+##                             Ridgewood 
+##                                   248 
+##                         Rikers Island 
+##                                     3 
+##                             Riverdale 
+##                                    40 
+##                              Rochdale 
+##                                    44 
+##                        Rockaway Beach 
+##                                     0 
+##                         Rockaway Park 
+##                                     1 
+##                      Roosevelt Island 
+##                                   367 
+##                              Rosebank 
+##                                    13 
+##                              Rosedale 
+##                                    15 
+##                             Rossville 
+##                                     1 
+##                               Roxbury 
+##                                     0 
+##                        Sheepshead Bay 
+##                                    83 
+##                           Shore Acres 
+##                                     0 
+##                           Silver Lake 
+##                                     6 
+##                                  SoHo 
+##                                 87588 
+##                             Soundview 
+##                                   106 
+##                           South Beach 
+##                                     1 
+##                           South Bronx 
+##                                   168 
+##                      South Ozone Park 
+##                                   755 
+##                   Springfield Gardens 
+##                                    98 
+##                        Spuyten Duyvil 
+##                                    34 
+##                            St. Albans 
+##                                    17 
+##                            St. George 
+##                                     3 
+##                             Stapleton 
+##                                    25 
+##                       Stuyvesant Town 
+##                                  9438 
+##                             Sunnyside 
+##                                  8704 
+##                           Sunset Park 
+##                                   325 
+##                          Sutton Place 
+##                                 81233 
+##                          Throggs Neck 
+##                                    34 
+##                             Todt Hill 
+##                                     0 
+##                         Tompkinsville 
+##                                     6 
+##                           Tottenville 
+##                                     0 
+##                               Tremont 
+##                                    89 
+##                               Tribeca 
+##                                 97257 
+##                            Tudor City 
+##                                 49655 
+##                            Turtle Bay 
+##                                128532 
+##                             Unionport 
+##                                    50 
+##                    University Heights 
+##                                    82 
+##                       Upper East Side 
+##                                680256 
+##                       Upper West Side 
+##                                414113 
+##                                Utopia 
+##                                     1 
+##                    Van Cortlandt Park 
+##                                    10 
+##                              Van Nest 
+##                                    16 
+##                          Vinegar Hill 
+##                                    23 
+##                             Wakefield 
+##                                     9 
+##                    Washington Heights 
+##                                  6025 
+##                         West Brighton 
+##                                     5 
+##                            West Farms 
+##                                    34 
+##              West Jamaica Bay Islands 
+##                                     1 
+##                          West Village 
+##                                124493 
+##                   Westchester Heights 
+##                                    28 
+##                           Westerleigh 
+##                                     0 
+##                            Whitestone 
+##                                    24 
+##                        Williamsbridge 
+##                                    64 
+##                          Williamsburg 
+##                                 24258 
+##                           Willowbrook 
+##                                     0 
+##                       Windsor Terrace 
+##                                   178 
+##                               Wingate 
+##                                    71 
+##                             Woodhaven 
+##                                    64 
+##                              Woodlawn 
+##                                    21 
+##                               Woodrow 
+##                                     0 
+##                              Woodside 
+##                                  3482</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">harlem_pickups &lt;-<span class="st"> </span><span class="kw">filter</span>(taxi_df, <span class="kw">str_detect</span>(pickup_nhood, <span class="st">&quot;Harlem&quot;</span>))
 harlem_pickups</code></pre></div>
-<pre><code>## # A tibble: 32,025 × 16
-##    VendorID passenger_count trip_distance RateCodeID store_and_fwd_flag
-##       &lt;chr&gt;           &lt;int&gt;         &lt;dbl&gt;      &lt;chr&gt;              &lt;chr&gt;
-## 1         1               1          0.70          1                  N
-## 2         1               1          1.10          1                  N
-## 3         2               1         18.79          2                  N
-## 4         2               1          4.66          1                  N
-## 5         2               5          0.67          1                  N
-## 6         2               3          0.76          1                  N
-## 7         1               1          2.70          1                  N
-## 8         2               1          3.19          1                  N
-## 9         2               1          0.85          1                  N
-## 10        2               2          6.06          1                  N
-## # ... with 32,015 more rows, and 11 more variables: payment_type &lt;chr&gt;,
-## #   fare_amount &lt;dbl&gt;, tip_amount &lt;dbl&gt;, tolls_amount &lt;dbl&gt;,
-## #   pickup_hour &lt;chr&gt;, pickup_dow &lt;chr&gt;, dropoff_hour &lt;chr&gt;,
-## #   dropoff_dow &lt;chr&gt;, pickup_nhood &lt;chr&gt;, dropoff_nhood &lt;chr&gt;,
-## #   kSplits &lt;chr&gt;</code></pre>
+<pre><code>## # A tibble: 71,979 × 21
+##    VendorID passenger_count trip_distance pickup_longitude pickup_latitude
+##       &lt;int&gt;           &lt;int&gt;         &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+## 1         1               1          1.30        -73.94249        40.79044
+## 2         1               1          4.70        -73.93792        40.81836
+## 3         2               1          4.42        -73.93603        40.80380
+## 4         2               1          5.89        -73.93388        40.80276
+## 5         1               1          4.10        -73.94268        40.81198
+## 6         2               3          3.20        -73.95286        40.78902
+## 7         1               2          1.40        -73.93806        40.80351
+## 8         1               2          1.10        -73.95318        40.79869
+## 9         2               1          0.32        -73.95840        40.80272
+## 10        2               1          1.81        -73.94090        40.80830
+## # ... with 71,969 more rows, and 16 more variables: RatecodeID &lt;int&gt;,
+## #   store_and_fwd_flag &lt;chr&gt;, dropoff_longitude &lt;dbl&gt;,
+## #   dropoff_latitude &lt;dbl&gt;, payment_type &lt;int&gt;, fare_amount &lt;dbl&gt;,
+## #   tip_amount &lt;dbl&gt;, tolls_amount &lt;dbl&gt;, tip_percent &lt;dbl&gt;,
+## #   pickup_hour &lt;fctr&gt;, pickup_dow &lt;fctr&gt;, dropoff_hour &lt;fctr&gt;,
+## #   dropoff_dow &lt;fctr&gt;, trip_duration &lt;int&gt;, pickup_nhood &lt;fctr&gt;,
+## #   dropoff_nhood &lt;fctr&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># uncomment the line below (ctrl+shift+c) and filter harlem_pickups on Financial District</span>
+<span class="co"># how many rows?</span>
+<span class="co"># fidi &lt;- filter(harlem_pickups, ...)</span></code></pre></div>
 </section><section id="select-a-set-of-columns" class="slide level2">
 <h1>Select a set of columns</h1>
 <ul>
@@ -621,20 +1098,20 @@ harlem_pickups</code></pre></div>
 <h1>Select Example</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(taxi_df, pickup_nhood, dropoff_nhood, 
        fare_amount, dropoff_hour, trip_distance)</code></pre></div>
-<pre><code>## # A tibble: 3,770,319 × 5
-##           pickup_nhood      dropoff_nhood fare_amount dropoff_hour
-##                  &lt;chr&gt;              &lt;chr&gt;       &lt;dbl&gt;        &lt;chr&gt;
-## 1  Morningside Heights   Hamilton Heights         9.5         6-10
-## 2              Midtown            Midtown         6.5         6-10
-## 3      Lower East Side               Soho         7.0         6-10
-## 4   Financial District Financial District         3.0         6-10
-## 5              Chelsea       West Village         5.5         6-10
-## 6      Upper East Side             Harlem         9.5         10-5
-## 7           Fort Green               Soho        12.5         12-4
-## 8      Upper East Side    Upper East Side         4.0         12-4
-## 9      Upper West Side    Upper West Side         5.0         12-4
-## 10                &lt;NA&gt;            Clinton        52.0         12-4
-## # ... with 3,770,309 more rows, and 1 more variables: trip_distance &lt;dbl&gt;</code></pre>
+<pre><code>## # A tibble: 5,000,000 × 5
+##       pickup_nhood      dropoff_nhood fare_amount dropoff_hour
+##             &lt;fctr&gt;             &lt;fctr&gt;       &lt;dbl&gt;       &lt;fctr&gt;
+## 1             SoHo       Battery Park         7.0     6PM-10PM
+## 2     East Village Bedford Stuyvesant        18.0     6PM-10PM
+## 3          Midtown           Downtown        34.0     10PM-1AM
+## 4  Upper East Side        Murray Hill         9.0     12PM-4PM
+## 5     Little Italy          Chinatown         4.5     6PM-10PM
+## 6  Upper East Side  Greenwich Village        15.5     10PM-1AM
+## 7             NoHo       West Village        10.0      1AM-5AM
+## 8  Upper East Side    Upper West Side        13.0     12PM-4PM
+## 9  Upper East Side        East Harlem         8.5     12PM-4PM
+## 10 Upper West Side            Midtown         9.0      4PM-6PM
+## # ... with 4,999,990 more rows, and 1 more variables: trip_distance &lt;dbl&gt;</code></pre>
 </section><section id="select-other-options" class="slide level2">
 <h1>Select: Other Options</h1>
 <dl>
@@ -664,20 +1141,35 @@ harlem_pickups</code></pre></div>
 <h1>Arrange</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(<span class="kw">arrange</span>(taxi_df, <span class="kw">desc</span>(fare_amount), pickup_nhood), 
        fare_amount, pickup_nhood)</code></pre></div>
-<pre><code>## # A tibble: 3,770,319 × 2
-##    fare_amount    pickup_nhood
-##          &lt;dbl&gt;           &lt;chr&gt;
-## 1      3130.30    Borough Park
-## 2      3130.30 Upper West Side
-## 3       990.00            &lt;NA&gt;
-## 4       900.00    Little Italy
-## 5       900.00            &lt;NA&gt;
-## 6       630.01         Chelsea
-## 7       600.00    Throggs Neck
-## 8       500.00       Chinatown
-## 9       500.00       Chinatown
-## 10      500.00         Clinton
-## # ... with 3,770,309 more rows</code></pre>
+<pre><code>## # A tibble: 5,000,000 × 2
+##    fare_amount                          pickup_nhood
+##          &lt;dbl&gt;                                &lt;fctr&gt;
+## 1      2020.37                         East New York
+## 2       991.16                              Glendale
+## 3       889.97                      Garment District
+## 4       750.00                               Midwood
+## 5       606.00                              Gramercy
+## 6       600.00                            Tudor City
+## 7       534.00                               Astoria
+## 8       495.70                       Upper East Side
+## 9       445.00 John F. Kennedy International Airport
+## 10      420.00                       Upper East Side
+## # ... with 4,999,990 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">select</span>(<span class="kw">arrange</span>(taxi_df, <span class="kw">desc</span>(fare_amount), pickup_nhood), 
+       fare_amount, pickup_nhood), <span class="dv">10</span>)</code></pre></div>
+<pre><code>## # A tibble: 10 × 2
+##    fare_amount                          pickup_nhood
+##          &lt;dbl&gt;                                &lt;fctr&gt;
+## 1      2020.37                         East New York
+## 2       991.16                              Glendale
+## 3       889.97                      Garment District
+## 4       750.00                               Midwood
+## 5       606.00                              Gramercy
+## 6       600.00                            Tudor City
+## 7       534.00                               Astoria
+## 8       495.70                       Upper East Side
+## 9       445.00 John F. Kennedy International Airport
+## 10      420.00                       Upper East Side</code></pre>
 </section><section id="exercise-1" class="slide level2">
 <h1>Exercise</h1>
 <p>Use <code>arrange()</code> to sort on the basis of <code>tip_amount</code>, <code>dropoff_nhood</code>, and <code>pickup_dow</code>, with descending order for tip amount</p>
@@ -702,62 +1194,103 @@ harlem_pickups</code></pre></div>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">taxi_df &lt;-<span class="st"> </span><span class="kw">mutate</span>(taxi_df, <span class="dt">tip_pct =</span> tip_amount/fare_amount)
 <span class="kw">select</span>(taxi_df, tip_pct, fare_amount, tip_amount)</code></pre></div>
-<pre><code>## # A tibble: 3,770,319 × 3
+<pre><code>## # A tibble: 5,000,000 × 3
 ##      tip_pct fare_amount tip_amount
 ##        &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
-## 1  0.0000000         9.5       0.00
-## 2  0.2384615         6.5       1.55
-## 3  0.2371429         7.0       1.66
-## 4  0.0000000         3.0       0.00
-## 5  0.2363636         5.5       1.30
-## 6  0.2273684         9.5       2.16
-## 7  0.2000000        12.5       2.50
-## 8  0.2500000         4.0       1.00
-## 9  0.2000000         5.0       1.00
-## 10 0.2755769        52.0      14.33
-## # ... with 3,770,309 more rows</code></pre>
+## 1  0.2928571         7.0       2.05
+## 2  0.1388889        18.0       2.50
+## 3  0.2076471        34.0       7.06
+## 4  0.0000000         9.0       0.00
+## 5  0.0000000         4.5       0.00
+## 6  0.0000000        15.5       0.00
+## 7  0.2260000        10.0       2.26
+## 8  0.2276923        13.0       2.96
+## 9  0.2188235         8.5       1.86
+## 10 0.3000000         9.0       2.70
+## # ... with 4,999,990 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">transmute</span>(taxi_df, <span class="dt">tip_pct =</span> tip_amount/fare_amount)</code></pre></div>
+<pre><code>## # A tibble: 5,000,000 × 1
+##      tip_pct
+##        &lt;dbl&gt;
+## 1  0.2928571
+## 2  0.1388889
+## 3  0.2076471
+## 4  0.0000000
+## 5  0.0000000
+## 6  0.0000000
+## 7  0.2260000
+## 8  0.2276923
+## 9  0.2188235
+## 10 0.3000000
+## # ... with 4,999,990 more rows</code></pre>
 </section><section id="summarise-data-by-groups" class="slide level2">
 <h1>Summarise Data by Groups</h1>
 <ul>
 <li class="fragment">The <code>group_by</code> verb creates a grouping by a categorical variable</li>
 <li class="fragment">Functions can be placed inside <code>summarise</code> to create summary functions</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarise</span>(<span class="kw">group_by</span>(taxi_df, dropoff_nhood), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grouped_taxi &lt;-<span class="st"> </span><span class="kw">group_by</span>(taxi_df, dropoff_nhood)
+<span class="kw">class</span>(grouped_taxi)</code></pre></div>
+<pre><code>## [1] &quot;grouped_df&quot; &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grouped_taxi</code></pre></div>
+<pre><code>## Source: local data frame [5,000,000 x 22]
+## Groups: dropoff_nhood [260]
+## 
+##    VendorID passenger_count trip_distance pickup_longitude pickup_latitude
+##       &lt;int&gt;           &lt;int&gt;         &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+## 1         1               1          1.40        -74.00555        40.72562
+## 2         2               2          4.58        -73.98419        40.73022
+## 3         2               5          9.63        -73.97183        40.76273
+## 4         1               1          1.70        -73.96131        40.77190
+## 5         1               2          0.60        -73.99568        40.72430
+## 6         1               1          4.10        -73.95731        40.76214
+## 7         2               5          1.76        -73.99208        40.72919
+## 8         2               1          2.68        -73.95257        40.78289
+## 9         2               1          1.69        -73.94909        40.78134
+## 10        2               1          1.16        -73.98251        40.76832
+## # ... with 4,999,990 more rows, and 17 more variables: RatecodeID &lt;int&gt;,
+## #   store_and_fwd_flag &lt;chr&gt;, dropoff_longitude &lt;dbl&gt;,
+## #   dropoff_latitude &lt;dbl&gt;, payment_type &lt;int&gt;, fare_amount &lt;dbl&gt;,
+## #   tip_amount &lt;dbl&gt;, tolls_amount &lt;dbl&gt;, tip_percent &lt;dbl&gt;,
+## #   pickup_hour &lt;fctr&gt;, pickup_dow &lt;fctr&gt;, dropoff_hour &lt;fctr&gt;,
+## #   dropoff_dow &lt;fctr&gt;, trip_duration &lt;int&gt;, pickup_nhood &lt;fctr&gt;,
+## #   dropoff_nhood &lt;fctr&gt;, tip_pct &lt;dbl&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarize</span>(<span class="kw">group_by</span>(taxi_df, dropoff_nhood), 
           <span class="dt">Num =</span> <span class="kw">n</span>(), <span class="dt">ave_tip_pct =</span> <span class="kw">mean</span>(tip_pct))</code></pre></div>
-<pre><code>## # A tibble: 122 × 3
-##               dropoff_nhood   Num ave_tip_pct
-##                       &lt;chr&gt; &lt;int&gt;       &lt;dbl&gt;
-## 1                 Annandale    16  0.16486695
-## 2             Ardon Heights    16  0.15149972
-## 3  Astoria-Long Island City 34728  0.11710247
-## 4                Auburndale   424  0.09363095
-## 5              Battery Park 32618  0.14849849
-## 6                 Bay Ridge  3171  0.14507851
-## 7                Baychester   168  0.06078747
-## 8              Bedford Park  1028  0.08187483
-## 9        Bedford-Stuyvesant 17382  0.12722678
-## 10              Bensonhurst  1081  0.12771086
-## # ... with 112 more rows</code></pre>
+<pre><code>## # A tibble: 260 × 3
+##      dropoff_nhood   Num ave_tip_pct
+##             &lt;fctr&gt; &lt;int&gt;       &lt;dbl&gt;
+## 1         Annadale     5  0.24561406
+## 2    Arden Heights    12  0.15648199
+## 3         Arrochar    36  0.11437722
+## 4          Arverne    69  0.11855379
+## 5          Astoria 53770  0.16893957
+## 6  Astoria Heights   594  0.08350706
+## 7       Auburndale   390  0.09936931
+## 8       Bath Beach   802  0.10006194
+## 9     Battery Park 53613  0.20848133
+## 10       Bay Ridge  2846  0.13369090
+## # ... with 250 more rows</code></pre>
 </section><section id="group-by-neighborhoods-example" class="slide level2">
 <h1>Group By Neighborhoods Example</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summarise</span>(<span class="kw">group_by</span>(taxi_df, pickup_nhood, dropoff_nhood), 
           <span class="dt">Num =</span> <span class="kw">n</span>(), <span class="dt">ave_tip_pct =</span> <span class="kw">mean</span>(tip_pct))</code></pre></div>
-<pre><code>## Source: local data frame [5,224 x 4]
+<pre><code>## Source: local data frame [13,089 x 4]
 ## Groups: pickup_nhood [?]
 ## 
-##                pickup_nhood            dropoff_nhood   Num ave_tip_pct
-##                       &lt;chr&gt;                    &lt;chr&gt; &lt;int&gt;       &lt;dbl&gt;
-## 1             Ardon Heights            Ardon Heights     1  0.00000000
-## 2  Astoria-Long Island City Astoria-Long Island City  6714  0.09712743
-## 3  Astoria-Long Island City               Auburndale    13  0.06520367
-## 4  Astoria-Long Island City             Battery Park    14  0.10140865
-## 5  Astoria-Long Island City                Bay Ridge     5  0.15388657
-## 6  Astoria-Long Island City             Bedford Park     3  0.05550679
-## 7  Astoria-Long Island City       Bedford-Stuyvesant    68  0.09819024
-## 8  Astoria-Long Island City              Bensonhurst     2  0.00000000
-## 9  Astoria-Long Island City              Boerum Hill    12  0.09941085
-## 10 Astoria-Long Island City             Borough Park     9  0.08205749
-## # ... with 5,214 more rows</code></pre>
+##    pickup_nhood   dropoff_nhood   Num ave_tip_pct
+##          &lt;fctr&gt;          &lt;fctr&gt; &lt;int&gt;       &lt;dbl&gt;
+## 1      Arrochar        Arrochar     1  0.00000000
+## 2      Arrochar   Crown Heights     2  0.18914665
+## 3       Arverne         Arverne     4  0.12575000
+## 4       Arverne    Far Rockaway     2  0.00000000
+## 5       Astoria         Astoria  9896  0.34644699
+## 6       Astoria Astoria Heights   161  0.07155575
+## 7       Astoria      Auburndale     4  0.05240741
+## 8       Astoria      Bath Beach     1  0.00000000
+## 9       Astoria    Battery Park    19  0.14814670
+## 10      Astoria       Bay Ridge     8  0.09474953
+## # ... with 13,079 more rows</code></pre>
 </section><section id="chainingpiping" class="slide level2">
 <h1>Chaining/Piping</h1>
 <ul>
@@ -772,22 +1305,22 @@ harlem_pickups</code></pre></div>
 <li class="fragment">Let’s arrange the above average tips in descending order, and only look at the locations that had at least 10 dropoffs and pickups.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">filter</span>(<span class="kw">arrange</span>(<span class="kw">summarise</span>(<span class="kw">group_by</span>(taxi_df, pickup_nhood, dropoff_nhood), <span class="dt">Num =</span> <span class="kw">n</span>(), <span class="dt">ave_tip_pct =</span> <span class="kw">mean</span>(tip_pct)), <span class="kw">desc</span>(ave_tip_pct)), Num &gt;=<span class="st"> </span><span class="dv">10</span>)</code></pre></div>
-<pre><code>## Source: local data frame [2,620 x 4]
-## Groups: pickup_nhood [86]
+<pre><code>## Source: local data frame [5,333 x 4]
+## Groups: pickup_nhood [151]
 ## 
-##                pickup_nhood            dropoff_nhood   Num ave_tip_pct
-##                       &lt;chr&gt;                    &lt;chr&gt; &lt;int&gt;       &lt;dbl&gt;
-## 1              Kings Bridge             Kings Bridge    11   1.2256871
-## 2           Upper East Side              Brownsville    23   0.9447013
-## 3                 Bay Ridge                Bay Ridge    60   0.7915420
-## 4             The Rockaways            The Rockaways    33   0.7828405
-## 5  Gravesend-Sheepshead Bay Gravesend-Sheepshead Bay    80   0.5122171
-## 6                      &lt;NA&gt;                     &lt;NA&gt; 27834   0.4725437
-## 7               Bensonhurst              Bensonhurst    59   0.4512018
-## 8           Upper East Side           Spuyten Duyvil    65   0.3463543
-## 9                      Soho               Mott Haven    12   0.3239580
-## 10             Bedford Park             Bedford Park    30   0.3078915
-## # ... with 2,610 more rows</code></pre>
+##          pickup_nhood                         dropoff_nhood   Num
+##                &lt;fctr&gt;                                &lt;fctr&gt; &lt;int&gt;
+## 1             Melrose                               Melrose    23
+## 2        Central Park John F. Kennedy International Airport   548
+## 3          Mott Haven                            Mott Haven   242
+## 4  La Guardia Airport                    La Guardia Airport  1665
+## 5        Battery Park                          Battery Park  1666
+## 6      Pelham Gardens                        Pelham Gardens    13
+## 7            Longwood                              Longwood    12
+## 8    Garment District                        Brighton Beach    21
+## 9        Far Rockaway                          Far Rockaway    16
+## 10          Flatlands                             Flatlands    15
+## # ... with 5,323 more rows, and 1 more variables: ave_tip_pct &lt;dbl&gt;</code></pre>
 </section><section class="slide level2">
 
 <p><img src="http://www.ohmagif.com/wp-content/uploads/2015/01/lemme-go-out-for-a-walk-oh-no-shit.gif" alt="damn" /></p>
@@ -802,22 +1335,22 @@ harlem_pickups</code></pre></div>
       <span class="dt">ave_tip_pct =</span> <span class="kw">mean</span>(tip_pct)), 
     <span class="kw">desc</span>(ave_tip_pct)), 
   Num &gt;=<span class="st"> </span><span class="dv">10</span>)</code></pre></div>
-<pre><code>## Source: local data frame [2,620 x 4]
-## Groups: pickup_nhood [86]
+<pre><code>## Source: local data frame [5,333 x 4]
+## Groups: pickup_nhood [151]
 ## 
-##                pickup_nhood            dropoff_nhood   Num ave_tip_pct
-##                       &lt;chr&gt;                    &lt;chr&gt; &lt;int&gt;       &lt;dbl&gt;
-## 1              Kings Bridge             Kings Bridge    11   1.2256871
-## 2           Upper East Side              Brownsville    23   0.9447013
-## 3                 Bay Ridge                Bay Ridge    60   0.7915420
-## 4             The Rockaways            The Rockaways    33   0.7828405
-## 5  Gravesend-Sheepshead Bay Gravesend-Sheepshead Bay    80   0.5122171
-## 6                      &lt;NA&gt;                     &lt;NA&gt; 27834   0.4725437
-## 7               Bensonhurst              Bensonhurst    59   0.4512018
-## 8           Upper East Side           Spuyten Duyvil    65   0.3463543
-## 9                      Soho               Mott Haven    12   0.3239580
-## 10             Bedford Park             Bedford Park    30   0.3078915
-## # ... with 2,610 more rows</code></pre>
+##          pickup_nhood                         dropoff_nhood   Num
+##                &lt;fctr&gt;                                &lt;fctr&gt; &lt;int&gt;
+## 1             Melrose                               Melrose    23
+## 2        Central Park John F. Kennedy International Airport   548
+## 3          Mott Haven                            Mott Haven   242
+## 4  La Guardia Airport                    La Guardia Airport  1665
+## 5        Battery Park                          Battery Park  1666
+## 6      Pelham Gardens                        Pelham Gardens    13
+## 7            Longwood                              Longwood    12
+## 8    Garment District                        Brighton Beach    21
+## 9        Far Rockaway                          Far Rockaway    16
+## 10          Flatlands                             Flatlands    15
+## # ... with 5,323 more rows, and 1 more variables: ave_tip_pct &lt;dbl&gt;</code></pre>
 </section><section id="magrittr" class="slide level2">
 <h1>Magrittr</h1>
 <p><img src="https://github.com/smbache/magrittr/raw/master/inst/logo.png" /></p>
@@ -834,22 +1367,22 @@ harlem_pickups</code></pre></div>
             <span class="dt">ave_tip_pct =</span> <span class="kw">mean</span>(tip_pct)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(ave_tip_pct)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(Num &gt;=<span class="st"> </span><span class="dv">10</span>)</code></pre></div>
-<pre><code>## Source: local data frame [2,620 x 4]
-## Groups: pickup_nhood [86]
+<pre><code>## Source: local data frame [5,333 x 4]
+## Groups: pickup_nhood [151]
 ## 
-##                pickup_nhood            dropoff_nhood   Num ave_tip_pct
-##                       &lt;chr&gt;                    &lt;chr&gt; &lt;int&gt;       &lt;dbl&gt;
-## 1              Kings Bridge             Kings Bridge    11   1.2256871
-## 2           Upper East Side              Brownsville    23   0.9447013
-## 3                 Bay Ridge                Bay Ridge    60   0.7915420
-## 4             The Rockaways            The Rockaways    33   0.7828405
-## 5  Gravesend-Sheepshead Bay Gravesend-Sheepshead Bay    80   0.5122171
-## 6                      &lt;NA&gt;                     &lt;NA&gt; 27834   0.4725437
-## 7               Bensonhurst              Bensonhurst    59   0.4512018
-## 8           Upper East Side           Spuyten Duyvil    65   0.3463543
-## 9                      Soho               Mott Haven    12   0.3239580
-## 10             Bedford Park             Bedford Park    30   0.3078915
-## # ... with 2,610 more rows</code></pre>
+##          pickup_nhood                         dropoff_nhood   Num
+##                &lt;fctr&gt;                                &lt;fctr&gt; &lt;int&gt;
+## 1             Melrose                               Melrose    23
+## 2        Central Park John F. Kennedy International Airport   548
+## 3          Mott Haven                            Mott Haven   242
+## 4  La Guardia Airport                    La Guardia Airport  1665
+## 5        Battery Park                          Battery Park  1666
+## 6      Pelham Gardens                        Pelham Gardens    13
+## 7            Longwood                              Longwood    12
+## 8    Garment District                        Brighton Beach    21
+## 9        Far Rockaway                          Far Rockaway    16
+## 10          Flatlands                             Flatlands    15
+## # ... with 5,323 more rows, and 1 more variables: ave_tip_pct &lt;dbl&gt;</code></pre>
 </section><section class="slide level2">
 
 <p><img src="http://i.giphy.com/lF1XZv45kIwMw.gif" alt="hellyeah" /></p>
@@ -871,22 +1404,22 @@ taxi_df %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">ave_tip =</span> <span class="kw">mean</span>(tip_pct), 
             <span class="dt">ave_dist =</span> <span class="kw">mean</span>(trip_distance)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(ave_dist &gt;<span class="st"> </span><span class="dv">3</span>, ave_tip &gt;<span class="st"> </span><span class="fl">0.05</span>)</code></pre></div>
-<pre><code>## Source: local data frame [398 x 4]
-## Groups: dropoff_nhood [27]
+<pre><code>## Source: local data frame [325 x 4]
+## Groups: dropoff_nhood [24]
 ## 
-##    dropoff_nhood     pickup_nhood    ave_tip  ave_dist
-##            &lt;chr&gt;            &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;
-## 1   Battery Park     Central Park 0.12694563  6.149281
-## 2   Battery Park          Clinton 0.11996579  4.016902
-## 3   Battery Park      East Harlem 0.07116177 10.124000
-## 4   Battery Park     East Village 0.14717019  3.537367
-## 5   Battery Park Garment District 0.13463903  3.965532
-## 6   Battery Park         Gramercy 0.14396885  4.153174
-## 7   Battery Park Hamilton Heights 0.06770436  8.843571
-## 8   Battery Park           Harlem 0.13829591  9.039286
-## 9   Battery Park           Inwood 0.18235294 11.950000
-## 10  Battery Park          Midtown 0.13428280  5.496734
-## # ... with 388 more rows</code></pre>
+##    dropoff_nhood        pickup_nhood   ave_tip ave_dist
+##           &lt;fctr&gt;              &lt;fctr&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1   Battery Park        Central Park 0.1176756 6.173279
+## 2   Battery Park             Clinton 0.1172045 3.989862
+## 3   Battery Park         East Harlem 0.1774509 8.880230
+## 4   Battery Park        East Village 0.1418621 3.556687
+## 5   Battery Park    Garment District 0.1194719 4.041875
+## 6   Battery Park            Gramercy 0.1453468 4.743278
+## 7   Battery Park    Hamilton Heights 0.1386226 9.067857
+## 8   Battery Park              Harlem 0.1356608 8.968276
+## 9   Battery Park             Midtown 0.1166259 5.423574
+## 10  Battery Park Morningside Heights 0.1344809 8.083016
+## # ... with 315 more rows</code></pre>
 </section><section id="pipe-and-plot" class="slide level2">
 <h1>Pipe and Plot</h1>
 <p>Piping is not limited to dplyr functions, can be used everywhere!</p>
@@ -906,7 +1439,7 @@ taxi_df %&gt;%<span class="st"> </span>
 <span class="st">    </span><span class="kw">scale_fill_gradient</span>(<span class="dt">low =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre></div>
 </section><section class="slide level2">
 
-<p><img src="1-intro-to-R_files/figure-revealjs/unnamed-chunk-14-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="1-intro-to-R_files/figure-revealjs/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;" /></p>
 </section><section id="piping-to-other-arguments" class="slide level2">
 <h1>Piping to other arguments</h1>
 <ul>
@@ -926,19 +1459,19 @@ taxi_df %&gt;%<span class="st"> </span>
 ## lm(formula = ave_tip ~ ave_dist, data = .)
 ## 
 ## Residuals:
-##       Min        1Q    Median        3Q       Max 
-## -0.112258 -0.010882  0.002727  0.014168  0.140976 
+##      Min       1Q   Median       3Q      Max 
+## -0.12962 -0.01573 -0.00397  0.00826  2.10714 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  0.1324307  0.0016071  82.402  &lt; 2e-16 ***
-## ave_dist    -0.0017345  0.0003004  -5.773 1.15e-08 ***
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.147818   0.006793   21.76  &lt; 2e-16 ***
+## ave_dist    -0.003279   0.001247   -2.63  0.00878 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.02468 on 724 degrees of freedom
-## Multiple R-squared:  0.04401,    Adjusted R-squared:  0.04269 
-## F-statistic: 33.33 on 1 and 724 DF,  p-value: 1.153e-08</code></pre>
+## Residual standard error: 0.0927 on 571 degrees of freedom
+## Multiple R-squared:  0.01197,    Adjusted R-squared:  0.01024 
+## F-statistic: 6.915 on 1 and 571 DF,  p-value: 0.008776</code></pre>
 </section><section id="exercise-2" class="slide level2">
 <h1>Exercise</h1>
 <p>Your turn:</p>
@@ -1010,8 +1543,8 @@ taxi_df %&gt;%<span class="st"> </span>
 <ul>
 <li class="fragment">Now we can create our plot by simply calling our two functions</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">taxi_hood_sum</span>(taxi_df) %&gt;%<span class="st"> </span>tile_plot_hood</code></pre></div>
-<p><img src="1-intro-to-R_files/figure-revealjs/unnamed-chunk-18-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(plotly)
+<span class="kw">taxi_hood_sum</span>(taxi_df) %&gt;%<span class="st"> </span>tile_plot_hood %&gt;%<span class="st"> </span>ggplotly</code></pre></div>
 <p>Let’s make that baby interactive.</p>
 </section><section id="creating-complex-pipelines-with-do" class="slide level2">
 <h1>Creating Complex Pipelines with do</h1>
@@ -1031,50 +1564,229 @@ taxi_df %&gt;%<span class="st"> </span>
 <pre><code>## Source: local data frame [14 x 6]
 ## Groups: dropoff_dow [7]
 ## 
-##    dropoff_dow tip_amount    tip_pct fare_amount      dropoff_nhood
-##          &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;              &lt;chr&gt;
-## 1          Fri       7.00  116.66667        0.06  Greenwich Village
-## 2          Fri     454.00   64.85714        7.00 Bedford-Stuyvesant
-## 3          Mon       5.00  100.00000        0.05       West Village
-## 4          Mon      55.70   22.28000        2.50      The Rockaways
-## 5          Sat      15.00 1500.00000        0.01    Upper West Side
-## 6          Sat      10.00 1000.00000        0.01            Midtown
-## 7          Sun     100.00   22.22222        4.50    Upper West Side
-## 8          Sun     125.25   17.89286        7.00   Garment District
-## 9          Thu      66.65   26.66000        2.50    Upper East Side
-## 10         Thu      93.18   20.70667        4.50   Hamilton Heights
-## 11         Tue      11.99 1199.00000        0.01            Chelsea
-## 12         Tue      62.00   24.80000        2.50       Battery Park
-## 13         Wed     121.25   26.94444        4.50            Clinton
-## 14         Wed      57.00   22.80000        2.50            Midtown
-## # ... with 1 more variables: pickup_nhood &lt;chr&gt;</code></pre>
+##    dropoff_dow tip_amount  tip_pct fare_amount
+##         &lt;fctr&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+## 1          Sun       4.60  460.000        0.01
+## 2          Sun      80.70   32.280        2.50
+## 3          Mon      62.00 6200.000        0.01
+## 4          Mon      38.00 3800.000        0.01
+## 5          Tue      35.00 3500.000        0.01
+## 6          Tue      21.00 2100.000        0.01
+## 7          Wed      49.69 4969.000        0.01
+## 8          Wed     100.00   40.000        2.50
+## 9          Thu      10.80 1080.000        0.01
+## 10         Thu     655.58   65.558       10.00
+## 11         Fri      53.61 5361.000        0.01
+## 12         Fri      22.00 2200.000        0.01
+## 13         Sat      20.00 2000.000        0.01
+## 14         Sat      10.00 1000.000        0.01
+## # ... with 2 more variables: dropoff_nhood &lt;fctr&gt;, pickup_nhood &lt;fctr&gt;</code></pre>
 </section><section id="estimating-multiple-models-with-do" class="slide level2">
 <h1>Estimating Multiple Models with do</h1>
 <ul>
 <li class="fragment">A common use of <code>do</code> is to calculate many different models by a grouping variable</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">taxi_df %&gt;%<span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">10</span>^<span class="dv">4</span>) %&gt;%<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dow_lms &lt;-<span class="st"> </span>taxi_df %&gt;%<span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">10</span>^<span class="dv">4</span>) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(dropoff_dow) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">do</span>(<span class="dt">lm_tip =</span> <span class="kw">lm</span>(tip_pct ~<span class="st"> </span>pickup_nhood +<span class="st"> </span>passenger_count +<span class="st"> </span>pickup_hour,
      <span class="dt">data =</span> .))</code></pre></div>
+</section><section class="slide level2">
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dow_lms</code></pre></div>
 <pre><code>## Source: local data frame [7 x 2]
 ## Groups: &lt;by row&gt;
 ## 
 ## # A tibble: 7 × 2
 ##   dropoff_dow   lm_tip
-## *       &lt;chr&gt;   &lt;list&gt;
-## 1         Fri &lt;S3: lm&gt;
+## *      &lt;fctr&gt;   &lt;list&gt;
+## 1         Sun &lt;S3: lm&gt;
 ## 2         Mon &lt;S3: lm&gt;
-## 3         Sat &lt;S3: lm&gt;
-## 4         Sun &lt;S3: lm&gt;
+## 3         Tue &lt;S3: lm&gt;
+## 4         Wed &lt;S3: lm&gt;
 ## 5         Thu &lt;S3: lm&gt;
-## 6         Tue &lt;S3: lm&gt;
-## 7         Wed &lt;S3: lm&gt;</code></pre>
-</section><section class="slide level2">
-
+## 6         Fri &lt;S3: lm&gt;
+## 7         Sat &lt;S3: lm&gt;</code></pre>
 <p>Where are our results? <img src="http://i.giphy.com/oEnTTI3ZdK6ic.gif" alt="digging" /></p>
 </section><section id="cleaning-output" class="slide level2">
 <h1>Cleaning Output</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(dow_lms$lm_tip[[<span class="dv">1</span>]])</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = tip_pct ~ pickup_nhood + passenger_count + pickup_hour, 
+##     data = .)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.38318 -0.11700  0.01093  0.09271  2.38318 
+## 
+## Coefficients:
+##                                                    Estimate Std. Error
+## (Intercept)                                        0.097867   0.045502
+## pickup_nhoodBattery Park                           0.068485   0.061761
+## pickup_nhoodBedford Stuyvesant                     0.020767   0.103992
+## pickup_nhoodBoerum Hill                           -0.095178   0.168641
+## pickup_nhoodBrooklyn Heights                       0.018656   0.103751
+## pickup_nhoodBushwick                               0.109012   0.124009
+## pickup_nhoodCarnegie Hill                          0.047046   0.064253
+## pickup_nhoodCarroll Gardens                        0.074175   0.103758
+## pickup_nhoodCentral Park                           0.048001   0.062886
+## pickup_nhoodChelsea                                0.069769   0.047100
+## pickup_nhoodChinatown                             -0.080395   0.103714
+## pickup_nhoodClinton                               -0.004197   0.048940
+## pickup_nhoodClinton Hill                           0.172629   0.123488
+## pickup_nhoodColumbia Street Waterfront District   -0.070452   0.168736
+## pickup_nhoodColumbus Circle                        0.072323   0.058865
+## pickup_nhoodCrown Heights                          0.110186   0.168937
+## pickup_nhoodDowntown                               2.312732   0.123197
+## pickup_nhoodEast Elmhurst                         -0.090852   0.168845
+## pickup_nhoodEast Harlem                            0.020722   0.058087
+## pickup_nhoodEast Village                           0.044181   0.048662
+## pickup_nhoodElmhurst                               0.164822   0.168641
+## pickup_nhoodFinancial District                     0.068577   0.058052
+## pickup_nhoodFlatiron District                      0.057561   0.047572
+## pickup_nhoodFort Greene                           -0.097069   0.168762
+## pickup_nhoodGarment District                       0.017056   0.048029
+## pickup_nhoodGowanus                                0.035926   0.123407
+## pickup_nhoodGramercy                               0.055760   0.049125
+## pickup_nhoodGreenpoint                             0.020143   0.123178
+## pickup_nhoodGreenwich Village                      0.036255   0.048206
+## pickup_nhoodHamilton Heights                       0.093565   0.123197
+## pickup_nhoodHarlem                                 0.030657   0.079712
+## pickup_nhoodHunters Point                         -0.020143   0.168655
+## pickup_nhoodJackson Heights                       -0.070452   0.168736
+## pickup_nhoodJamaica Estates                       -0.094359   0.168805
+## pickup_nhoodJohn F. Kennedy International Airport  0.042741   0.050204
+## pickup_nhoodLa Guardia Airport                     0.041151   0.053624
+## pickup_nhoodLittle Italy                           0.035596   0.057396
+## pickup_nhoodLongwood                              -0.095178   0.168641
+## pickup_nhoodLower East Side                        0.069724   0.050162
+## pickup_nhoodManhattanville                        -0.095714   0.123222
+## pickup_nhoodMaspeth                                0.280501   0.169261
+## pickup_nhoodMidtown                                0.023903   0.046265
+## pickup_nhoodMorningside Heights                    0.069168   0.075423
+## pickup_nhoodMurray Hill                            0.008241   0.053729
+## pickup_nhoodNoHo                                   0.063105   0.056384
+## pickup_nhoodPark Slope                            -0.091671   0.168650
+## pickup_nhoodProspect Heights                       0.148155   0.168641
+## pickup_nhoodProspect Lefferts Gardens             -0.100577   0.168666
+## pickup_nhoodRed Hook                              -0.095178   0.168641
+## pickup_nhoodSoHo                                   0.032178   0.053507
+## pickup_nhoodStuyvesant Town                        0.178059   0.103670
+## pickup_nhoodSunnyside                             -0.021794   0.085021
+## pickup_nhoodSutton Place                           0.022966   0.056951
+## pickup_nhoodTribeca                                0.050114   0.058288
+## pickup_nhoodTudor City                             0.067291   0.067488
+## pickup_nhoodTurtle Bay                             0.062725   0.051865
+## pickup_nhoodUpper East Side                        0.043261   0.045616
+## pickup_nhoodUpper West Side                        0.048332   0.046457
+## pickup_nhoodWashington Heights                    -0.008674   0.103803
+## pickup_nhoodWest Village                           0.096652   0.052833
+## pickup_nhoodWilliamsburg                           0.001506   0.065681
+## pickup_nhoodWindsor Terrace                       -0.094359   0.168805
+## pickup_nhoodWoodside                               0.197969   0.168736
+## passenger_count                                   -0.003508   0.003472
+## pickup_hour5AM-9AM                                -0.012726   0.021028
+## pickup_hour9AM-12PM                               -0.023907   0.018149
+## pickup_hour12PM-4PM                               -0.013611   0.017796
+## pickup_hour4PM-6PM                                -0.001527   0.019540
+## pickup_hour6PM-10PM                                0.009725   0.017523
+## pickup_hour10PM-1AM                                0.000819   0.017655
+##                                                   t value Pr(&gt;|t|)    
+## (Intercept)                                         2.151   0.0317 *  
+## pickup_nhoodBattery Park                            1.109   0.2677    
+## pickup_nhoodBedford Stuyvesant                      0.200   0.8417    
+## pickup_nhoodBoerum Hill                            -0.564   0.5726    
+## pickup_nhoodBrooklyn Heights                        0.180   0.8573    
+## pickup_nhoodBushwick                                0.879   0.3795    
+## pickup_nhoodCarnegie Hill                           0.732   0.4642    
+## pickup_nhoodCarroll Gardens                         0.715   0.4748    
+## pickup_nhoodCentral Park                            0.763   0.4454    
+## pickup_nhoodChelsea                                 1.481   0.1388    
+## pickup_nhoodChinatown                              -0.775   0.4384    
+## pickup_nhoodClinton                                -0.086   0.9317    
+## pickup_nhoodClinton Hill                            1.398   0.1624    
+## pickup_nhoodColumbia Street Waterfront District    -0.418   0.6764    
+## pickup_nhoodColumbus Circle                         1.229   0.2194    
+## pickup_nhoodCrown Heights                           0.652   0.5144    
+## pickup_nhoodDowntown                               18.773   &lt;2e-16 ***
+## pickup_nhoodEast Elmhurst                          -0.538   0.5906    
+## pickup_nhoodEast Harlem                             0.357   0.7213    
+## pickup_nhoodEast Village                            0.908   0.3641    
+## pickup_nhoodElmhurst                                0.977   0.3286    
+## pickup_nhoodFinancial District                      1.181   0.2377    
+## pickup_nhoodFlatiron District                       1.210   0.2265    
+## pickup_nhoodFort Greene                            -0.575   0.5653    
+## pickup_nhoodGarment District                        0.355   0.7225    
+## pickup_nhoodGowanus                                 0.291   0.7710    
+## pickup_nhoodGramercy                                1.135   0.2566    
+## pickup_nhoodGreenpoint                              0.164   0.8701    
+## pickup_nhoodGreenwich Village                       0.752   0.4521    
+## pickup_nhoodHamilton Heights                        0.759   0.4477    
+## pickup_nhoodHarlem                                  0.385   0.7006    
+## pickup_nhoodHunters Point                          -0.119   0.9050    
+## pickup_nhoodJackson Heights                        -0.418   0.6764    
+## pickup_nhoodJamaica Estates                        -0.559   0.5763    
+## pickup_nhoodJohn F. Kennedy International Airport   0.851   0.3947    
+## pickup_nhoodLa Guardia Airport                      0.767   0.4430    
+## pickup_nhoodLittle Italy                            0.620   0.5353    
+## pickup_nhoodLongwood                               -0.564   0.5726    
+## pickup_nhoodLower East Side                         1.390   0.1648    
+## pickup_nhoodManhattanville                         -0.777   0.4374    
+## pickup_nhoodMaspeth                                 1.657   0.0977 .  
+## pickup_nhoodMidtown                                 0.517   0.6055    
+## pickup_nhoodMorningside Heights                     0.917   0.3593    
+## pickup_nhoodMurray Hill                             0.153   0.8781    
+## pickup_nhoodNoHo                                    1.119   0.2633    
+## pickup_nhoodPark Slope                             -0.544   0.5868    
+## pickup_nhoodProspect Heights                        0.879   0.3798    
+## pickup_nhoodProspect Lefferts Gardens              -0.596   0.5511    
+## pickup_nhoodRed Hook                               -0.564   0.5726    
+## pickup_nhoodSoHo                                    0.601   0.5477    
+## pickup_nhoodStuyvesant Town                         1.718   0.0861 .  
+## pickup_nhoodSunnyside                              -0.256   0.7977    
+## pickup_nhoodSutton Place                            0.403   0.6868    
+## pickup_nhoodTribeca                                 0.860   0.3901    
+## pickup_nhoodTudor City                              0.997   0.3189    
+## pickup_nhoodTurtle Bay                              1.209   0.2267    
+## pickup_nhoodUpper East Side                         0.948   0.3431    
+## pickup_nhoodUpper West Side                         1.040   0.2984    
+## pickup_nhoodWashington Heights                     -0.084   0.9334    
+## pickup_nhoodWest Village                            1.829   0.0676 .  
+## pickup_nhoodWilliamsburg                            0.023   0.9817    
+## pickup_nhoodWindsor Terrace                        -0.559   0.5763    
+## pickup_nhoodWoodside                                1.173   0.2409    
+## passenger_count                                    -1.010   0.3126    
+## pickup_hour5AM-9AM                                 -0.605   0.5452    
+## pickup_hour9AM-12PM                                -1.317   0.1880    
+## pickup_hour12PM-4PM                                -0.765   0.4445    
+## pickup_hour4PM-6PM                                 -0.078   0.9377    
+## pickup_hour6PM-10PM                                 0.555   0.5790    
+## pickup_hour10PM-1AM                                 0.046   0.9630    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1626 on 1268 degrees of freedom
+## Multiple R-squared:  0.2574, Adjusted R-squared:  0.217 
+## F-statistic: 6.369 on 69 and 1268 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)
+dow_lms %&gt;%<span class="st"> </span><span class="kw">tidy</span>(lm_tip)</code></pre></div>
+<pre><code>## Source: local data frame [440 x 6]
+## Groups: dropoff_dow [7]
+## 
+##    dropoff_dow                           term    estimate  std.error
+##         &lt;fctr&gt;                          &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+## 1          Sun                    (Intercept)  0.09786717 0.04550147
+## 2          Sun       pickup_nhoodBattery Park  0.06848530 0.06176153
+## 3          Sun pickup_nhoodBedford Stuyvesant  0.02076703 0.10399217
+## 4          Sun        pickup_nhoodBoerum Hill -0.09517851 0.16864112
+## 5          Sun   pickup_nhoodBrooklyn Heights  0.01865640 0.10375084
+## 6          Sun           pickup_nhoodBushwick  0.10901180 0.12400928
+## 7          Sun      pickup_nhoodCarnegie Hill  0.04704615 0.06425285
+## 8          Sun    pickup_nhoodCarroll Gardens  0.07417470 0.10375796
+## 9          Sun       pickup_nhoodCentral Park  0.04800133 0.06288641
+## 10         Sun            pickup_nhoodChelsea  0.06976916 0.04709954
+## # ... with 430 more rows, and 2 more variables: statistic &lt;dbl&gt;,
+## #   p.value &lt;dbl&gt;</code></pre>
 <ul>
 <li class="fragment">By design, every function in <code>dplyr</code> returns a <code>data.frame</code></li>
 <li class="fragment">In the example above, we get back a spooky <code>data.frame</code> with a column of <code>S3</code> <code>lm</code> objects</li>
@@ -1093,14 +1805,14 @@ taxi_df %&gt;%<span class="st"> </span><span class="kw">sample_n</span>(<span cl
 ## Groups: dropoff_dow [7]
 ## 
 ##   dropoff_dow   r.squared adj.r.squared     sigma statistic      p.value
-##         &lt;chr&gt;       &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
-## 1         Fri 0.012864767   0.008113777 0.1761057 2.7078077 5.260343e-13
-## 2         Mon 0.025077627   0.019732658 0.1291271 4.6918188 3.232969e-32
-## 3         Sat 0.002554994  -0.001747105 0.3448431 0.5938947 9.966492e-01
-## 4         Sun 0.017883598   0.012394358 0.1312927 3.2579373 7.092899e-19
-## 5         Thu 0.013374484   0.008795209 0.1548958 2.9206556 3.220142e-14
-## 6         Tue 0.010055232   0.005068104 0.1878385 2.0162372 3.003607e-06
-## 7         Wed 0.018359260   0.013595505 0.1326060 3.8539476 2.520699e-22
+##        &lt;fctr&gt;       &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+## 1         Sun 0.009929894  0.0022771783 0.2513585 1.2975647 2.279059e-02
+## 2         Mon 0.031695031  0.0246904662 0.1365088 4.5249107 7.017475e-42
+## 3         Tue 0.018186271  0.0119403662 0.1827718 2.9117110 4.041650e-18
+## 4         Wed 0.025359182  0.0187215999 0.1234986 3.8205453 2.384147e-33
+## 5         Thu 0.005899222 -0.0002269261 0.3536197 0.9629578 5.811217e-01
+## 6         Fri 0.018950778  0.0121548890 0.1217199 2.7885650 4.669893e-19
+## 7         Sat 0.021114101  0.0149665394 0.1242509 3.4345490 9.712228e-27
 ## # ... with 6 more variables: df &lt;int&gt;, logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;,
 ## #   deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
 <h3 id="model-coefficients">Model Coefficients</h3>
@@ -1109,23 +1821,124 @@ taxi_df %&gt;%<span class="st"> </span><span class="kw">sample_n</span>(<span cl
 <span class="st">  </span><span class="kw">group_by</span>(dropoff_dow) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">do</span>(<span class="kw">tidy</span>(<span class="kw">lm</span>(tip_pct ~<span class="st"> </span>pickup_nhood +<span class="st"> </span>passenger_count +<span class="st"> </span>pickup_hour,
      <span class="dt">data =</span> .)))</code></pre></div>
-<pre><code>## Source: local data frame [458 x 6]
+<pre><code>## Source: local data frame [679 x 6]
 ## Groups: dropoff_dow [7]
 ## 
-##    dropoff_dow                           term      estimate  std.error
-##          &lt;chr&gt;                          &lt;chr&gt;         &lt;dbl&gt;      &lt;dbl&gt;
-## 1          Fri                    (Intercept)  0.1308501115 0.01935745
-## 2          Fri       pickup_nhoodBattery Park  0.0224420372 0.02454915
-## 3          Fri          pickup_nhoodBay Ridge  7.3125673626 0.11601645
-## 4          Fri pickup_nhoodBedford-Stuyvesant -0.0523070856 0.06876425
-## 5          Fri        pickup_nhoodBensonhurst -0.1296439134 0.16296551
-## 6          Fri        pickup_nhoodBoerum Hill -0.0009372393 0.04365824
-## 7          Fri       pickup_nhoodBorough Park  0.0061098822 0.08313886
-## 8          Fri           pickup_nhoodBushwick  0.0115772487 0.06878946
-## 9          Fri      pickup_nhoodCarnegie Hill  0.0035406892 0.02246441
-## 10         Fri    pickup_nhoodCarroll Gardens  0.0282658929 0.04014668
-## # ... with 448 more rows, and 2 more variables: statistic &lt;dbl&gt;,
+##    dropoff_dow                           term    estimate  std.error
+##         &lt;fctr&gt;                          &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+## 1          Sun                    (Intercept)  0.06917512 0.02590300
+## 2          Sun       pickup_nhoodBattery Park  0.06047232 0.03351828
+## 3          Sun pickup_nhoodBedford Stuyvesant  0.07412049 0.05935296
+## 4          Sun         pickup_nhoodBlissville -0.06432979 0.21598642
+## 5          Sun        pickup_nhoodBoerum Hill  0.07669869 0.07245135
+## 6          Sun          pickup_nhoodBriarwood  0.10126328 0.11021075
+## 7          Sun   pickup_nhoodBrooklyn Heights  0.01993671 0.05661751
+## 8          Sun           pickup_nhoodBushwick  0.01246053 0.06694339
+## 9          Sun      pickup_nhoodCarnegie Hill  0.05221887 0.03281742
+## 10         Sun    pickup_nhoodCarroll Gardens  0.03492579 0.07244414
+## # ... with 669 more rows, and 2 more variables: statistic &lt;dbl&gt;,
 ## #   p.value &lt;dbl&gt;</code></pre>
+</section><section id="spatial-visualizations-with-ggplot2-and-purrr" class="slide level2">
+<h1>Spatial Visualizations with <code>ggplot2</code> and <code>purrr</code></h1>
+<h3 id="visualizing-pickups-by-time">Visualizing Pickups by Time</h3>
+<ul>
+<li class="fragment">Let’s try another example</li>
+<li class="fragment">We will visualize pickups and index them by time</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># min and max coordinates:</span>
+min_lat &lt;-<span class="st"> </span><span class="fl">40.5774</span>
+max_lat &lt;-<span class="st"> </span><span class="fl">40.9176</span>
+min_long &lt;-<span class="st"> </span>-<span class="fl">74.15</span>
+max_long &lt;-<span class="st"> </span>-<span class="fl">73.7004</span>
+
+pickups &lt;-<span class="st"> </span>taxi_df %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(pickup_longitude &gt;<span class="st"> </span>min_long,
+         pickup_latitude &lt;<span class="st"> </span>max_lat,
+         dropoff_longitude &gt;<span class="st"> </span>min_long,
+         dropoff_latitude &lt;<span class="st"> </span>max_lat) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(pickup_hour, 
+           pickup_longitude, 
+           pickup_latitude) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">num_pickups =</span> <span class="kw">n</span>())</code></pre></div>
+</section><section id="load-additional-libraries" class="slide level2">
+<h1>Load Additional Libraries</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)
+<span class="kw">library</span>(lubridate)
+<span class="kw">library</span>(RColorBrewer)
+<span class="kw">library</span>(magick)</code></pre></div>
+</section><section id="visualize-pickups" class="slide level2">
+<h1>Visualize Pickups</h1>
+<h3 id="ggplot2-theme">ggplot2 Theme</h3>
+<ul>
+<li class="fragment"><code>ggplot</code> will give very aesthetically appealing plots by default</li>
+<li class="fragment">However, it really shines in it’s ability to customize</li>
+<li class="fragment">See the <code>ggthemes</code> for some template themes</li>
+<li class="fragment">We’ll use the theme below inspired from <a href="https://twitter.com/minimaxir/status/628921315198566400">Max Woolf’s Tweet on this dataset</a></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theme_map_dark &lt;-<span class="st"> </span>function(<span class="dt">palate_color =</span> <span class="st">&quot;Greys&quot;</span>) {
+  
+  palate &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(palate_color, <span class="dt">n=</span><span class="dv">9</span>)
+  color.background =<span class="st"> &quot;black&quot;</span>
+  color.grid.minor =<span class="st"> &quot;black&quot;</span>
+  color.grid.major =<span class="st"> &quot;black&quot;</span>
+  color.axis.text =<span class="st"> </span>palate[<span class="dv">1</span>]
+  color.axis.title =<span class="st"> </span>palate[<span class="dv">1</span>]
+  color.title =<span class="st"> </span>palate[<span class="dv">1</span>]
+  
+  font.title &lt;-<span class="st"> &quot;Source Sans Pro&quot;</span>
+  font.axis &lt;-<span class="st"> &quot;Open Sans Condensed Bold&quot;</span>
+  
+  <span class="kw">theme_bw</span>(<span class="dt">base_size=</span><span class="dv">5</span>) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">panel.background=</span><span class="kw">element_rect</span>(<span class="dt">fill=</span>color.background, <span class="dt">color=</span>color.background)) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.background=</span><span class="kw">element_rect</span>(<span class="dt">fill=</span>color.background, <span class="dt">color=</span>color.background)) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">panel.border=</span><span class="kw">element_rect</span>(<span class="dt">color=</span>color.background)) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">panel.grid.major=</span><span class="kw">element_blank</span>()) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">panel.grid.minor=</span><span class="kw">element_blank</span>()) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.ticks=</span><span class="kw">element_blank</span>()) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill=</span>color.background)) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.text =</span> <span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">3</span>,<span class="dt">colour=</span>color.axis.title,<span class="dt">family=</span>font.axis)) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.title =</span> <span class="kw">element_blank</span>(), <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>, <span class="dt">legend.direction=</span><span class="st">&quot;horizontal&quot;</span>) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.key.width=</span><span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;cm&quot;</span>), <span class="dt">legend.key.height=</span><span class="kw">unit</span>(<span class="fl">0.25</span>, <span class="st">&quot;cm&quot;</span>), <span class="dt">legend.margin=</span><span class="kw">unit</span>(-<span class="fl">0.5</span>,<span class="st">&quot;cm&quot;</span>)) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.title=</span><span class="kw">element_text</span>(<span class="dt">colour=</span>color.title,<span class="dt">family=</span>font.title, <span class="dt">size=</span><span class="dv">14</span>)) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">plot.subtitle =</span> <span class="kw">element_text</span>(<span class="dt">colour=</span>color.title,<span class="dt">family=</span>font.title, <span class="dt">size=</span><span class="dv">12</span>)) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.x=</span><span class="kw">element_blank</span>()) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text.y=</span><span class="kw">element_blank</span>()) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.title.y=</span><span class="kw">element_blank</span>()) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>()) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill=</span>color.background, 
+                                          <span class="dt">color=</span>color.background),
+          <span class="dt">strip.text=</span><span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">7</span>,<span class="dt">colour=</span>color.axis.title,<span class="dt">family=</span>font.title))
+  
+}</code></pre></div>
+</section><section id="plot-function" class="slide level2">
+<h1>Plot Function</h1>
+<h3 id="complete-the-function-below">Complete the Function Below</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># x axis should be longitude</span>
+<span class="co"># y axis should be latitude</span>
+map_nyc &lt;-<span class="st"> </span>function(df, pickup_hr) {
+  
+  gplot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(df, 
+                  <span class="kw">aes</span>(<span class="dt">x=</span>..., 
+                      <span class="dt">y=</span>...)) +
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">color=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size=</span><span class="fl">0.06</span>) +
+<span class="st">    </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits=</span><span class="kw">c</span>(min_long, max_long)) +
+<span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits=</span><span class="kw">c</span>(min_lat, max_lat)) +
+<span class="st">    </span><span class="kw">theme_map_dark</span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Map of NYC Taxi Pickups&quot;</span>,
+         <span class="dt">subtitle =</span> <span class="kw">paste0</span>(<span class="st">&quot;Pickups between &quot;</span>, pickup_hr))
+  
+  <span class="kw">return</span>(gplot)
+  
+}</code></pre></div>
+</section><section id="iterate-and-plot" class="slide level2">
+<h1>Iterate and Plot!</h1>
+<h3 id="now-we-can-iterate-and-plot">Now we can Iterate and Plot</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hour_plots &lt;-<span class="st"> </span><span class="kw">ungroup</span>(pickups) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(num_pickups &gt;<span class="st"> </span><span class="dv">1</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">split</span>(.$pickup_hour) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">map</span>(~<span class="st"> </span><span class="kw">map_nyc</span>(.x, <span class="dt">pickup_hr =</span> .x$pickup_hour[<span class="dv">1</span>]))
+
+hour_plots</code></pre></div>
 </section><section id="summary-1" class="slide level2">
 <h1>Summary</h1>
 <dl>
@@ -1180,6 +1993,7 @@ taxi_df %&gt;%<span class="st"> </span><span class="kw">sample_n</span>(<span cl
         transition: 'default', // none/fade/slide/convex/concave/zoom
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
 
         // Optional reveal.js plugins
         dependencies: [

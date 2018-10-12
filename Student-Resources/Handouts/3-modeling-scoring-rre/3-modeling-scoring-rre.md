@@ -56,7 +56,7 @@ rxGetInfo(mort_xdf, getVarInfo = TRUE, numRows = 5)
 ```
 
 ```
-## File name: /home/alizaidi/mr4ds/Student-Resources/rmarkdown/mortgage.xdf 
+## File name: /datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/mortgage.xdf 
 ## Number of observations: 1e+05 
 ## Number of variables: 6 
 ## Number of blocks: 10 
@@ -95,7 +95,7 @@ rxGetInfo(mort_xdf, numRows = 3, getVarInfo = TRUE)
 ```
 
 ```
-## File name: /home/alizaidi/mr4ds/Student-Resources/rmarkdown/mortgage.xdf 
+## File name: /datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/mortgage.xdf 
 ## Number of observations: 1e+05 
 ## Number of variables: 7 
 ## Number of blocks: 10 
@@ -199,15 +199,15 @@ lapply(mort_split, rxGetInfo)
 
 ```
 ## $train
-## File name: /home/alizaidi/mr4ds/Student-Resources/rmarkdown/mortgage.trainvalidate.train.xdf 
-## Number of observations: 75233 
+## File name: /datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/mortgage.trainvalidate.train.xdf 
+## Number of observations: 75153 
 ## Number of variables: 8 
 ## Number of blocks: 10 
 ## Compression type: zlib 
 ## 
 ## $validate
-## File name: /home/alizaidi/mr4ds/Student-Resources/rmarkdown/mortgage.trainvalidate.validate.xdf 
-## Number of observations: 24767 
+## File name: /datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/mortgage.trainvalidate.validate.xdf 
+## Number of observations: 24847 
 ## Number of variables: 8 
 ## Number of blocks: 10 
 ## Compression type: zlib
@@ -249,7 +249,7 @@ formula(mort_xdf, depVar = "default_flag", varsToDrop = c("defaultflag", "trainv
 ```
 ## default_flag ~ creditScore + houseAge + yearsEmploy + ccDebt + 
 ##     year + default
-## <environment: 0x324589d0>
+## <environment: 0x2f5a4318>
 ```
 
 ## Build Your Model 
@@ -266,7 +266,7 @@ make_form()
 ```
 ## default_flag ~ creditScore + houseAge + yearsEmploy + ccDebt + 
 ##     year
-## <environment: 0x146d369a0>
+## <environment: 0xbb5f7fc8>
 ```
 
 ```r
@@ -302,25 +302,25 @@ summary(default_model_logit)
 ##     houseAge + yearsEmploy + ccDebt + year
 ## Data: xdf_data (RxXdfData Data Source)
 ## File name:
-##     /home/alizaidi/mr4ds/Student-Resources/rmarkdown/mortgage.trainvalidate.train.xdf
+##     /datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/mortgage.trainvalidate.train.xdf
 ## Dependent variable(s): default_flag
 ## Total independent variables: 6 
-## Number of valid observations: 75233
+## Number of valid observations: 75153
 ## Number of missing observations: 0 
-## -2*LogLikelihood: 2442.0457 (Residual deviance on 75227 degrees of freedom)
+## -2*LogLikelihood: 2412.1336 (Residual deviance on 75147 degrees of freedom)
 ##  
 ## Coefficients:
 ##               Estimate Std. Error z value Pr(>|z|)    
-## (Intercept) -1.227e+03  6.869e+01 -17.855 2.22e-16 ***
-## creditScore -7.210e-03  1.215e-03  -5.936 2.91e-09 ***
-## houseAge     2.271e-02  7.893e-03   2.878  0.00401 ** 
-## yearsEmploy -2.296e-01  3.019e-02  -7.605 2.22e-16 ***
-## ccDebt       1.234e-03  4.098e-05  30.112 2.22e-16 ***
-## year         6.070e-01  3.420e-02  17.749 2.22e-16 ***
+## (Intercept) -1.275e+03  7.166e+01 -17.796 2.22e-16 ***
+## creditScore -7.064e-03  1.202e-03  -5.877 4.19e-09 ***
+## houseAge     2.819e-02  7.897e-03   3.570 0.000357 ***
+## yearsEmploy -2.683e-01  3.087e-02  -8.692 2.22e-16 ***
+## ccDebt       1.228e-03  4.165e-05  29.495 2.22e-16 ***
+## year         6.313e-01  3.567e-02  17.700 2.22e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Condition number of final variance-covariance matrix: 2.289 
+## Condition number of final variance-covariance matrix: 2.485 
 ## Number of iterations: 9
 ```
 
@@ -340,26 +340,26 @@ summary(default_model_tree)
 
 ```
 ##                     Length Class      Mode     
-## frame                 9    data.frame list     
-## where                 0    -none-     NULL     
-## call                  5    -none-     call     
-## cptable              35    -none-     numeric  
-## method                1    -none-     character
-## parms                 3    -none-     list     
-## control               9    -none-     list     
-## splits              120    -none-     numeric  
-## xvars                 5    -none-     character
-## variable.importance   5    -none-     numeric  
-## ordered               5    -none-     logical  
-## valid.obs             1    -none-     numeric  
-## missing.obs           1    -none-     numeric  
-## params               65    -none-     list     
-## formula               3    formula    call
+## frame                9     data.frame list     
+## where                0     -none-     NULL     
+## call                 5     -none-     call     
+## cptable             20     -none-     numeric  
+## method               1     -none-     character
+## parms                3     -none-     list     
+## control              9     -none-     list     
+## splits              60     -none-     numeric  
+## xvars                5     -none-     character
+## variable.importance  5     -none-     numeric  
+## ordered              5     -none-     logical  
+## valid.obs            1     -none-     numeric  
+## missing.obs          1     -none-     numeric  
+## params              65     -none-     list     
+## formula              3     formula    call
 ```
 
 ```r
-# library(RevoTreeView)
-# plot(createTreeView(default_model_tree))
+library(RevoTreeView)
+plot(createTreeView(default_model_tree))
 ```
 
 
@@ -387,18 +387,18 @@ rxGetInfo(default_logit_scored, numRows = 2)
 ```
 
 ```
-## File name: /home/alizaidi/mr4ds/Student-Resources/rmarkdown/scored.xdf 
-## Number of observations: 24767 
+## File name: /datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/scored.xdf 
+## Number of observations: 24847 
 ## Number of variables: 8 
 ## Number of blocks: 10 
 ## Compression type: zlib 
 ## Data (2 rows starting with row 1):
 ##   pred_logit_default default default_flag creditScore houseAge yearsEmploy
-## 1       6.239485e-07       0      current         743       18           3
-## 2       1.631257e-05       0      current         539       15           3
+## 1       8.729900e-08       0      current         683       22           3
+## 2       4.187452e-05       0      current         708       32           2
 ##   ccDebt year
-## 1   3080 2000
-## 2   4588 2000
+## 1   1143 2000
+## 2   5864 2000
 ```
 
 
@@ -406,72 +406,12 @@ rxGetInfo(default_logit_scored, numRows = 2)
 
 
 ```r
-rxRoc(actualVarName = "default", 
+plot(rxRoc(actualVarName = "default", 
       predVarNames ="pred_logit_default", 
-      data = default_logit_scored)
+      data = default_logit_scored))
 ```
 
-```
-##    threshold        predVarName sensitivity specificity
-## 1       0.00 pred_logit_default  1.00000000   0.0000000
-## 2       0.01 pred_logit_default  0.87068966   0.9387449
-## 3       0.02 pred_logit_default  0.81896552   0.9629630
-## 4       0.03 pred_logit_default  0.75862069   0.9738347
-## 5       0.04 pred_logit_default  0.69827586   0.9797574
-## 6       0.05 pred_logit_default  0.65517241   0.9841386
-## 7       0.06 pred_logit_default  0.62068966   0.9872216
-## 8       0.07 pred_logit_default  0.57758621   0.9894933
-## 9       0.08 pred_logit_default  0.53448276   0.9906292
-## 10      0.09 pred_logit_default  0.49137931   0.9914811
-## 11      0.10 pred_logit_default  0.48275862   0.9923330
-## 12      0.11 pred_logit_default  0.46551724   0.9931037
-## 13      0.12 pred_logit_default  0.44827586   0.9937934
-## 14      0.13 pred_logit_default  0.43103448   0.9945235
-## 15      0.14 pred_logit_default  0.41379310   0.9950103
-## 16      0.15 pred_logit_default  0.38793103   0.9955783
-## 17      0.16 pred_logit_default  0.37931034   0.9961462
-## 18      0.17 pred_logit_default  0.37931034   0.9965924
-## 19      0.18 pred_logit_default  0.34482759   0.9969170
-## 20      0.19 pred_logit_default  0.34482759   0.9972009
-## 21      0.20 pred_logit_default  0.33620690   0.9973632
-## 22      0.21 pred_logit_default  0.33620690   0.9977689
-## 23      0.22 pred_logit_default  0.31896552   0.9978500
-## 24      0.23 pred_logit_default  0.31034483   0.9979717
-## 25      0.24 pred_logit_default  0.30172414   0.9982151
-## 26      0.25 pred_logit_default  0.28448276   0.9983368
-## 27      0.26 pred_logit_default  0.27586207   0.9984585
-## 28      0.27 pred_logit_default  0.27586207   0.9985396
-## 29      0.28 pred_logit_default  0.26724138   0.9987019
-## 30      0.29 pred_logit_default  0.25862069   0.9989047
-## 31      0.30 pred_logit_default  0.25862069   0.9989858
-## 32      0.31 pred_logit_default  0.24137931   0.9990264
-## 33      0.32 pred_logit_default  0.23275862   0.9991075
-## 34      0.33 pred_logit_default  0.21551724   0.9991481
-## 35      0.34 pred_logit_default  0.20689655   0.9991887
-## 36      0.35 pred_logit_default  0.18103448   0.9993509
-## 37      0.37 pred_logit_default  0.16379310   0.9993509
-## 38      0.38 pred_logit_default  0.14655172   0.9994321
-## 39      0.39 pred_logit_default  0.12931034   0.9994726
-## 40      0.40 pred_logit_default  0.12068966   0.9994726
-## 41      0.41 pred_logit_default  0.12068966   0.9995132
-## 42      0.42 pred_logit_default  0.10344828   0.9995943
-## 43      0.43 pred_logit_default  0.09482759   0.9995943
-## 44      0.46 pred_logit_default  0.09482759   0.9996755
-## 45      0.47 pred_logit_default  0.08620690   0.9997160
-## 46      0.49 pred_logit_default  0.07758621   0.9997160
-## 47      0.50 pred_logit_default  0.06896552   0.9997160
-## 48      0.53 pred_logit_default  0.06034483   0.9997566
-## 49      0.55 pred_logit_default  0.04310345   0.9997972
-## 50      0.57 pred_logit_default  0.04310345   0.9998377
-## 51      0.60 pred_logit_default  0.04310345   0.9998783
-## 52      0.67 pred_logit_default  0.04310345   0.9999189
-## 53      0.68 pred_logit_default  0.04310345   0.9999594
-## 54      0.71 pred_logit_default  0.03448276   0.9999594
-## 55      0.72 pred_logit_default  0.02586207   0.9999594
-## 56      0.76 pred_logit_default  0.01724138   0.9999594
-## 57      0.78 pred_logit_default  0.01724138   1.0000000
-## 58      0.97 pred_logit_default  0.00000000   1.0000000
-```
+![](/datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/Handouts/3-modeling-scoring-rre/3-modeling-scoring-rre_files/figure-html/roc_curve-1.png)<!-- -->
 
 
 ## Testing a Second Model 
@@ -499,7 +439,7 @@ rxRocCurve("default",
            data = default_tree_scored)
 ```
 
-![](/home/alizaidi/mr4ds/Student-Resources/Handouts/3-modeling-scoring-rre/3-modeling-scoring-rre_files/figure-html/roc_multiple-1.png)<!-- -->
+![](/datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/Handouts/3-modeling-scoring-rre/3-modeling-scoring-rre_files/figure-html/roc_multiple-1.png)<!-- -->
 
 # Lab - Estimate Other Models Using the Functions Above
 
@@ -514,9 +454,10 @@ Use the above functions and estimate a model for each of those algorithms, and a
 ## Starter code
 
 default_model_forest <- estimate_model(mort_split$train, 
-                                       model = rxDForest,
+                                       model = ?,
                                        nTree = 100,
-                                       importance = TRUE,
+                                       importance = ,
+                                       ### any other args?,
                                        reportProgress = 0)
 
 default_forest_scored <- rxPredict(default_model_forest,
@@ -528,9 +469,11 @@ default_forest_scored <- rxPredict(default_model_forest,
 ## same for rxBTrees
 
 default_model_gbm <- estimate_model(mort_split$train,
-                                    model = rxBTrees,
+                                    model = ,
                                     importance = TRUE,
-                                    nTree = 100, reportProgress = 0)
+                                    nTree = ,
+                                    ### any other args?,
+                                    reportProgress = 0)
 
 default_gbm_scored <- rxPredict(default_model_gbm,
                                   mort_split$validate,
@@ -618,14 +561,14 @@ rxGetInfo(mort_2009_pred, numRows = 1)
 ```
 
 ```
-## File name: /home/alizaidi/mr4ds/Student-Resources/rmarkdown/mort2009predictions.xdf 
+## File name: /datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/mort2009predictions.xdf 
 ## Number of observations: 10000 
 ## Number of variables: 7 
 ## Number of blocks: 1 
 ## Compression type: zlib 
 ## Data (1 row starting with row 1):
 ##   ccDebt_Pred ccDebt creditScore houseAge yearsEmploy year default
-## 1    4839.105   3661         701       23           2 2009       0
+## 1    4951.689   3661         701       23           2 2009       0
 ```
 
 # Multiclass Classification
@@ -651,7 +594,7 @@ rxGetInfo(mort_xdf_factor, getVarInfo = TRUE, numRows = 4)
 ```
 
 ```
-## File name: /home/alizaidi/mr4ds/Student-Resources/rmarkdown/mort_year.xdf 
+## File name: /datadrive/LearnAnalytics-mr4ds-spark/mr4ds/Student-Resources/rmarkdown/mort_year.xdf 
 ## Number of observations: 1e+05 
 ## Number of variables: 7 
 ## Number of blocks: 10 

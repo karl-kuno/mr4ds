@@ -1,14 +1,13 @@
+## don't include regs and src files
+Registrations/
+etc/
+
+## project files
+*.Rhistory
+*.DS_Store
 .Rproj.user
-Spark/sample_taxi.csv
-data/
-trip-report.md
-.vs/
-trip-reports/
-.Rhistory
-notes.md
-gmailr-az.json
-.httr-oauth
-1-intro-to-R.nb.html
-1-intro-to-R_files
-2-dplyrXdf.nb.html
-2-dplyrXdf_files
+*.Rproj
+
+## and keys
+*.httr-oauth
+*.json

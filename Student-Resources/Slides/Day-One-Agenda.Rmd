@@ -1,0 +1,78 @@
+---
+title: "Day One Agenda"
+author: "Ali Zaidi"
+date: "October 10th, 2016"
+output:
+  revealjs::revealjs_presentation:
+    center: yes
+    css: ../slides.css
+    incremental: yes
+    previewLinks: yes
+    reveal_plugins:
+    - zoom
+    - notes
+    self_contained: no
+    slideNumber: yes
+    theme: night
+    viewDistance: 3
+---
+
+# Welcome!
+
+## R U Ready?
+
+* The goal of this course is to show you how to have fun with R
+* Course Webpage: [github.com/Azure/LearnAnalytics-mr4ds/](https://github.com/Azure/LearnAnalytics-mr4ds)
+
+## About Myself
+
+![](http://www.tridant.com.sg/wp-content/uploads/2015/03/rev_13287_logo_clarkhead_rgb_final_av-450px.png)
+
+
+## Background
+
+## Git Up Off That Thang
+
+![](http://img.deusm.com/informationweek/2014/10/1316800/Microsoft_LOVES_Linux.jpg)
+
+## Git 
+
++ Git is awesome
++ For the thorough-breds: [Jenny Bryan's Git book](http://happygitwithr.com/)
++ For the concise-minded: [Concise Git Tutorial](https://github.com/shekhargulati/git-the-missing-tutorial)
+
+## What You Should Do
+
++ Create a GitHub account: [github.com/join](https://github.com/join)
++ Download [GitKraken](https://www.gitkraken.com/) locally
++ Fork the course repository to your own account
++ Set upstream: https://github.com/Azure/LearnAnalytics-mr4ds.git
+    - git remote add upstream https://github.com/Azure/LearnAnalytics-mr4ds.git
+
+
+# Day One's Plan
+
+## Day One Modules
+
++ The Microsoft R Data Stack
++ The Core Principles of R
++ Functional Programming in R
++ Deep-dive into the `dplyr` package for data manipulation
+
+# Microsoft R Data Stack
+
+## Microsoft R Family
+
+<div style="width:800px">
+![](https://raw.githubusercontent.com/Azure/LearnAnalytics-mr4ds/master/Student-Resources/rmarkdown/images/mr-family.png)
+</div>
+
+
+## R Server 
+
++ [Data Scientist's Perspective on Microsoft R](http://blog.revolutionanalytics.com/2016/04/data-scientist-perspective.html)
+
+<div style="width:700px">
+![](https://raw.githubusercontent.com/Azure/LearnAnalytics-mr4ds/master/Student-Resources/rmarkdown/images/mrcomponents.png)
+</div>
+

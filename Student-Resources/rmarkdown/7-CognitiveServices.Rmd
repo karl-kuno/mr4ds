@@ -1,0 +1,81 @@
+---
+title: Getting Started with Cognitive Services APIs Using R
+author: Ali Zaidi
+---
+
+## Cognitive Services
+
+The Microsoft Cognitive Services provide intelligent APIs that you can use directly against your own data to make your applications more intelligent. They offer a variety of services that can be used in a variety of domains, from vision, to text, and even recommeder systems.
+
+Rather than training your own large-scale machine learning model to make intellingent predictions, you can use these services.
+
+Sign up for a free account at the [Cognitive Services Website](https://www.microsoft.com/cognitive-services).
+
+
+```{r install-roxford}
+
+# Project Oxford API ------------------------------------------------------
+
+if (!("Roxford") %in% names(installed.packages()[,1])) devtools::install_github("flovv/Roxford")
+library(Roxford)
+library(dplyr)
+library(tidyr)
+```
+
+## The Face API
+
+Let's use the Face API against the following photograph:
+![](http://crooksandliars.com/files/primary_image/16/07/trump_angry.jpg)
+
+Find the _Face - Preview_ API and generate/copy your key. This will detect faces in an image, as well as the rectangle containing the face and some generated face attributes, such as age.
+
+```{r face-example}
+
+pres_trump <- "http://crooksandliars.com/files/primary_image/16/07/trump_angry.jpg"
+face_key <- "---------------"
+face_trump <- getFaceResponseURL(pres_trump,
+                                 key = face_key)
+face_trump
+face_trump %>% select(contains("age"), contains("gender"))
+```
+
+## Emotion API
+
+Copy the Emotion API key, and save it to a variable called `emotion_key`. The `getEmotionResponseURL` calculates scores/confidence of various emotions from the provided image. We can flatten the responses into a single column and then sort on the scores to see the most confident scores.
+
+```{r emotion-key}
+
+emotion_key <- "---------------"
+
+trump_emotion <- getEmotionResponseURL(pres_trump, 
+                      key = emotion_key)
+
+trump_emotion %>% select(contains("scores")) %>% 
+  gather(key = "emotion", value = "scores") %>%
+  arrange(desc(scores))
+```
+
+## Vision API
+
+Copy the vision API key, and save it to a variable called `vision_key`. The vision API is more general, and allows us to do many things. For example, we can use tagging API to detect all the objects in an image. We can use the description API to tag all the objects and generate a caption/description of the image. The celebrities model is an example of a Domain Specific Models, which uses a recognition model to recognize from 200K celebrities from business, politics, sports and entertainment around the world. Domain-specific models is a continuously evolving feature within Computer Vision API.
+
+```{r vision-example}
+
+vision_key <- "---------------"
+
+trump_tag <- getTaggingResponseURL(pres_trump,
+                      key = vision_key)
+
+trump_tag
+
+trump_description <- getDescriptionResponseURL(pres_trump,
+                          key = vision_key)
+
+trump_description[1, ]
+
+trump_celeb <- getDomainModelResponseURL(pres_trump, 
+                          vision_key, 'celebrities')
+trump_celeb
+
+```
+

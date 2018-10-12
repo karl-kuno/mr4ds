@@ -11,7 +11,7 @@ output:
 
 ```{r}
 library(dplyr)
-taxi_url <- "http://alizaidi.blob.core.windows.net/training/taxi_df.rds"
+taxi_url <- "http://alizaidi.blob.core.windows.net/training/trainingData/manhattan_df.rds"
 taxi_df  <- readRDS(gzcon(url(taxi_url)))
 (taxi_df <- tbl_df(taxi_df))
 ```

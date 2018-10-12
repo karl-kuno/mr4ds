@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Operationalizing Solutions with mrsdeploy</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Ali Zaidi" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Operationalizing Solutions with <code>mrsdeploy</code>
+## Swagger, Remote Login, Webservices, and All That
+### Ali Zaidi
+### 2017/03/07
+
+---
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.callout-bold strong {
+  font-weight: normal;
+  color: #444444;
+  background-color: #FFFFAA;
+}
+.remark-code {
+  font-size: 14px;
+}
+.hljs-keyword {
+  font-weight: normal !important;
+}
+th {
+  text-align: left;
+}
+td, th {
+  padding: 3px 20px 3px 0;
+}
+
+@media print{@page {size: landscape}}
+
+&lt;/style&gt;
+
+
+# Configuring R Server for Operationalization
+
++ Resources:
+    - [About `mrsdeploy`](https://msdn.microsoft.com/en-us/microsoft-r/operationalize/about)
+    - [Getting Started for Adminstrators](https://msdn.microsoft.com/en-us/microsoft-r/operationalize/admin-get-started)
+    - [Getting Started for Data Scientists](https://msdn.microsoft.com/en-us/microsoft-r/operationalize/data-scientist-get-started)
+    - [Authentication Options](https://msdn.microsoft.com/en-us/microsoft-r/operationalize/security-authentication)
+
++ We will configure on a HDInsight R Server cluster
+
+---
+background-image: url(https://i-msdn.sec.s-msft.com/en-us/microsoft-r/media/o16n/security.png)
+background-position: 50% 50%
+class: center, bottom, inverse
+# `mrsdeploy`
+---
+
+## Remote Sessions on HDInsight R Server Clusters
+### Operationalizing Our Edge Node
+
+
++ The `mrsdeploy` package provides functions for establishing remote sessions
++ When using R in an interactive mode, this allows you to switch between a local R session with a remote session that could reside on an enterprise cluster, for example, giving data scientists the opportunity to deploy their applications without leaving their R environment
++ We will review the standard setup procedures for creating remote sessions on Azure HDInsight clusters
++ To be precise, we will operationalize the edge node our cluster
++ Review the documentation here: [Using Microsoft R Server for Operationalization](https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-hadoop-r-server-get-started#using-microsoft-r-server-operationalization)
+
+---
+
+## Remote Session
+### Setting up a One-Box Configuration
+
++ In this example, we will use a _one-box configuration_
+    - this means, our HDInsight R Server cluster will serve as both our:
+        + **compute node**, where computations will take place, and the 
+        + **web node** where users will log into.
+    - You have the flexibility to separate these two nodes
++ Let's log into our cluster using ssh:
+
+```bash
+ssh -L sshusername@clustername-ed-ssh.azurehdinsight.net
+```
+
++ Observe, we logged into the **edge node**!
+
+---
+
+## Remote Session
+### Running the Administration Utility
+
++ Every Microsoft R Server installation (9.0.1 and later) comes equipped with a utility that will assist you in operationalizing your server
++ This can be found in a directory named `microsoft-deployr` in your program library:
+
+```bash 
+cd /usr/lib64/microsoft-deployr/9.0.1/Microsoft.DeployR.Utils.AdminUtil
+```
+
++ This location contains a number of `.dll`s. 
++ Don't be afraid! Even though you're working on a Ubuntu Debian system, these `.dlls` will compile and work using the `dotnet` package already installed on your system.
++ Let's run the `AdminUtil.dll`:
+
+```bash
+sudo dotnet Microsoft.DeployR.Utils.AdminUtil.dll
+```
+
+---
+
+## Remote Session
+### Configuring and Testing Our One-Box System
+
++ This should open up an adminstration utility wizard to guide you through operationalization
++ Select:
+    - `1. Configure R Server for Operationalization`
+    - `A. One-box (web + compute nodes)`
+    - Enter a **new** password for the operationalization `admin` user, **NOT** the `sshuser`!
+        + this admin user is the admin for the operationalization service;
+        + it's deliberately separate from the cluster `admin`, to allow for this service to run on different platforms
++ Test your utility:
+    - Return to main menu: `E: Return to main menu`
+    - Select `6. Run Diagnostic tests`
+    - Select `A. Test configuration`
+    - Use the administrator's password that you just set up to run the diagnostics
+    
+---
+
+## Accessing Remote Server through a Client
+### Connecting to Client
+
++ Now that we have set up our cluster's edge node for operationalization, we can log into it as a client
++ The adminstration utility is running on port `12800` of the edge node
++ Currently (March 2017), the port `12800` is not open on the edge node's virtual network
++ You have two choices: 
+    - Set up a virtual network with port `12800` open
+    - Tunnel into your edge node and forward traffic from the edge node to your local browser
++ We will do the latter in this demonstration
+
+
+---
+
+## Remote Access Using SSH Forwarding
+### Using the `remoteLogin` Function
+
++ Set up port forwarding on the edge node:
+
+```bash
+ssh -L localhost:12800:localhost:12800 sshusername@clustername-ed-ssh.azurehdinsight.net
+```
+
++ Start an R session on your R client
+
+```R
+library(mrsdeploy)
+
+remoteLogin(
+    deployr_endpoint = "http://localhost:12800",
+    username = "admin",
+    password = passwd
+)
+```
+
+
++ Here we used the adminstrator's account to access the R Server
++ For additional authentication options, review the documentation on [Authentication options for operationalization](https://msdn.microsoft.com/en-us/microsoft-r/operationalize/security-authentication).
+
+---
+
+## Using the Remote Session
+### What Can we Do?
+
++ Our client session might indeed just be a R client instance
++ If you don't already have a R Client installation, you can easily install it using the Installation Wizard in Visual Studio.
++ We can then connect through R Client, using `"localhost:12800"` as our endpoint:
+
+![](imgs/r-client-connect.png)
+
+---
+
+## Differences Between Local and Remote
+
++ The R session will mention which packages you have on your remote that differ from the local
++ The prompt is prefixed with `REMOTE&gt; ` to indicate that your code will run on the remote server
++ You can interact with this session as if it were a local session
+
+---
+
+## Creating Spark Contexts
+
++ From your remote session you can interact with the cluster as if you were directly on the edge node
++ You can create Spark contexts using the `RxSpark` session as we did in [4-Modeling-with-RxSpark.Rmd](https://github.com/Azure/LearnAnalytics-mrs-spark/blob/10736ee68cf07638f8aa0a576084acfd986b3953/Student-Resources/rmarkdown/4-modeling-RxSpark.Rmd)
++ You can create `sparklyr` applications using `spark_connect` as per [Spark Examples](https://github.com/Azure/LearnAnalytics-mrs-spark/blob/10736ee68cf07638f8aa0a576084acfd986b3953/Student-Resources/rmarkdown/1-data-import.Rmd)
+
+```r
+library(RevoScaleR)
+
+spark_cc &lt;- RxSpark(consoleOutput = TRUE,
+                    nameNode = "default",
+                    port = 0,
+                    executorCores = 6,
+                    executorMem = "12G",
+                    persistentRun = TRUE)
+
+rxSetComputeContext(spark_cc)
+```
+
++ Nowe we have access to our cluster all through the convenience of our local R client session. We can develop our code locally and then deploy it to our cluster when we are ready.
+
+---
+
+## Switching Between Contexts
+
++ You can easily switch between contexts using `ESCAPE` to go from remote to local, and `resume()` to return to remote from local.
++ In our example, we will build a function to analyze a small dataset locally, and then test our function on our cluster
++ Press `Escape` to return to your local session
++ The `REMOTE &gt;` prompt should switch back to the local prompt `&gt; `
+
+```r
+download.file("https://alizaidi.blob.core.windows.net/training/sample_taxi.csv", 
+              "sample_taxi.csv")
+local_taxi &lt;- RxTextData("sample_taxi.csv")
+
+```
+
+---
+
+## Analyzing Data Locally with R Client
+
++ Even though R Client is limited to data that fits in-memory, it still has all the functions to allow you to develop fully scalable code that you could port to a larger system
++ For example, our data above is in text format
++ We don't have to even convert it to a `data.frame` prior to analysis
+
+
+```
+&gt; rxSummary(~trip_distance, data = local_taxi)
+Rows Read: 3770319, Total Rows Processed: 3770319, Total Chunk Time: 14.879 seconds 
+Computation time: 14.931 seconds.
+Call:
+rxSummary(formula = ~trip_distance, data = local_taxi)
+
+Summary Statistics Results for: ~trip_distance
+Data: local_taxi (RxTextData Data Source)
+File name: sample_taxi.csv
+Number of valid observations: 3770319 
+ 
+ Name          Mean     StdDev   Min Max  ValidObs MissingObs
+ trip_distance 2.836022 3.399167 0   49.8 3770319  0
+ ```
+
+---
+
+## Analyzing Data Locally with R Client
+### Creating Portable Functions
+
++ Now let's write a function that we could deploy onto our cluster
++ Let's calculate average tip amounts as a function of day of week
++ We won't convert to XDF, we'll still run on the text file
++ We'll just give `RevoScaleR` some information about the day of week column's levels
++ Hence, our function will be portable, and should work in any `RevoScaleR` environment
+
+```r
+
+ave_tip_dow &lt;- function(taxi_data= local_taxi) {
+
+    dows &lt;- c("Mon", "Tue", "Wed", "Thu", 
+              "Fri", "Sat", "Sun")
+
+    rxCube(tip_amount ~ pickup_dow,
+           transforms = list(pickup_dow = factor(pickup_dow,
+                                                 levels = dow_lvls)),
+           transformObjects = list(dow_lvls = dows),
+           data = taxi_data)
+
+}
+
+```
+
+---
+
+## Analyzing Data Locally with R Client
+### Local Check
+
++ Let's try out our code locally first
+
+```r
+&gt; ave_tip_dow()
+Rows Read: 3770319, Total Rows Processed: 3770319, Total Chunk Time: 25.120 seconds 
+Computation time: 25.514 seconds.
+Call:
+rxCube(formula = tip_amount ~ pickup_dow, data = taxi_data, transforms = list(pickup_dow = factor(pickup_dow, 
+    levels = dow_lvls)), transformObjects = list(dow_lvls = dows))
+
+Cube Results for: tip_amount ~ pickup_dow
+Data: taxi_data
+Dependent variable(s): tip_amount
+Number of valid observations: 3770319
+Number of missing observations: 0 
+Statistic: tip_amount means 
+ 
+  pickup_dow tip_amount Counts
+1 Mon        1.654347   472879
+2 Tue        1.688995   502224
+3 Wed        1.724086   507119
+4 Thu        1.702539   561367
+5 Fri        1.666001   587722
+6 Sat        1.455854   616846
+7 Sun        1.559591   522162
+```
+
+---
+
+## Publishing Local R Objects into Remote Workspace
+### Put Object onto Remote Workspace
+
++ Now that we've verified it works, let's port this to our cluster
++ We'll use the `putLocalObject` function to push our local object (the `ave_tip_dow` function) into our remote workspace:
+
+```r
+putLocalObject("ave_tip_dow")
+&gt; resume()
+REMOTE&gt; ls()
+[1] "ave_tip_dow"         "defaultRevoNodePath" "defaultRNodePath"   
+[4] "repos.date"          "Revo.version"        "rxgLastPendingJob"  
+[7] "spark_cc"            "taxi_large"          "wasb_taxi"   
+
+```
++ It is in our remote workspace!
+
+---
+
+## Analyzing Larger Data
+
++ Now that our function is in our remote workspace, we can deploy our code onto the cluster
++ Let's first download the larger dataset to our edge node, and then move it to HDFS
+
+```r
+REMOTE&gt; download.file("http://alizaidi.blob.core.windows.net/training/taxi_large.csv", 
+                      "taxi_large.csv")
+
+REMOTE&gt; wasb_taxi &lt;- "/NYCTaxi/sample/"
+REMOTE&gt; rxHadoopMakeDir(wasb_taxi)
+REMOTE&gt; rxHadoopCopyFromLocal("taxi_large.csv", wasb_taxi)
+REMOTE&gt; taxi_large &lt;- RxTextData(wasb_taxi, fileSystem = RxHdfsFileSystem())
+
+```
+
+
+---
+
+## Analyzing Data on Spark
+### Using the Functions Developed Locally
+
+
++ Now run the same function, this time in `RxSpark`, on 34,418,352 records (versus 4 MM locally) 
+
+```r
+REMOTE&gt; ave_tip_dow(taxi_large)
+======  ed1-sparkh (Master HPA Process) has started run at Tue Mar 14 01:42:07 2017  ====== 
+Computation time: 50.135 seconds. 
+======  ed1-sparkh (Master HPA Process) has completed run at Tue Mar 14 01:43:05 2017  ====== 
+Call:
+rxCube(formula = tip_amount ~ pickup_dow, data = &lt;S4 object of class structure("RxTextData", package = "RevoScaleR")&gt;, 
+    transforms = list(pickup_dow = factor(pickup_dow, levels = dow_lvls)), 
+    transformObjects = structure(list(dow_lvls = c("Mon", "Tue", 
+    "Wed", "Thu", "Fri", "Sat", "Sun")), .Names = "dow_lvls"))
+
+Cube Results for: tip_amount ~ pickup_dow
+Data: &lt;S4 object of class structure("RxTextData", package = "RevoScaleR")&gt;
+Dependent variable(s): tip_amount
+Number of valid observations: 34418352
+Number of missing observations: 0 
+Statistic: tip_amount means 
+ 
+  pickup_dow tip_amount Counts 
+1 Mon        1.647349   4251972
+2 Tue        1.687652   4494354
+3 Wed        1.718046   4637825
+4 Thu        1.699408   5211052
+5 Fri        1.660489   5429520
+6 Sat        1.452184   5676292
+7 Sun        2.394546   4717337
+```
+
+---
+
+## Analyzing Data on Spark
+### With the Convenience of Local Functions
+
++ While a simple example, it shows the versatility of `mrsdeploy`
++ As a data scientist, we developed a local R function designed using `RevoScaleR` and R Client, that initially used 4 MM records
++ We deployed our function to Spark, allowing it to process an order of magnitude larger data, all within a minute
+
+---
+
+## Creating Web Services
+
++ Another fascinating thing you can do with `mrsdeploy` is create web services deployed on your server that you can consume locally
++ For this functionality, please refer to the documentation on [How to deploy a model as a webservice](https://msdn.microsoft.com/en-us/microsoft-r/operationalize/data-scientist-get-started#how-to-deploy-a-model-as-a-service)
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('showSlide', function (slide) {setTimeout(function() {window.dispatchEvent(new Event('resize'));}, 100)});</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
